@@ -3,8 +3,12 @@ import sys
 import re
 import markdown
 from datetime import datetime
-from automation.gemini_client import GeminiClient
-from automation.wp_client import WordPressClient
+try:
+    from automation.gemini_client import GeminiClient
+    from automation.wp_client import WordPressClient
+except ImportError:
+    from gemini_client import GeminiClient
+    from wp_client import WordPressClient
 
 def parse_article_content(text):
     """
@@ -19,8 +23,20 @@ def parse_article_content(text):
     content_start_index = 0
     
     for i, line in enumerate(lines):
-        if line.strip().startswith("タイトル:"):
-            title = line.replace("タイトル:", "").strip()
+        # Match "タイトル:", "**タイトル**:", "# タイトル" etc.
+        clean_line = line.strip()
+        # Remove markdown bold/heading chars for checking
+        check_line = clean_line.replace("*", "").replace("#", "").strip()
+        
+        if check_line.startswith("タイトル:") or check_line.startswith("タイトル："):
+            # Extract title content
+            if ":" in clean_line:
+                title = clean_line.split(":", 1)[1].strip()
+            elif "：" in clean_line:
+                title = clean_line.split("：", 1)[1].strip()
+            
+            # Clean up markdown from title
+            title = title.replace("**", "").strip()
             content_start_index = i + 1
             break
             
