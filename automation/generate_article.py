@@ -64,17 +64,44 @@ def parse_schedule_date(schedule_str):
     # Convert to ISO 8601 format
     return dt.strftime("%Y-%m-%dT%H:%M:%S")
 
+def save_to_file(title, content, keyword):
+    import os
+    
+    output_dir = os.path.join(os.path.dirname(__file__), "generated_articles")
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+        
+    date_str = datetime.now().strftime("%Y-%m-%d")
+    safe_keyword = re.sub(r'[\\/*?:\"<>| ]', '_', keyword)
+    filename = f"{date_str}_{safe_keyword}.md"
+    filepath = os.path.join(output_dir, filename)
+    
+    file_content = f"""---
+title: {title}
+date: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
+keyword: {keyword}
+---
+
+{content}
+"""
+    
+    try:
+        with open(filepath, 'w', encoding='utf-8') as f:
+            f.write(file_content)
+        print(f"Saved local copy to: {filepath}")
+    except Exception as e:
+        print(f"Warning: Failed to save local file: {e}")
+
 def main():
     parser = argparse.ArgumentParser(description="Generate and post an article to WordPress.")
     parser.add_argument("--keyword", required=True, help="Keyword for the article")
     parser.add_argument("--dry-run", action="store_true", help="Generate content but do not post to WordPress")
     parser.add_argument("--schedule", help="Schedule post for future publication (format: 'YYYY-MM-DD HH:MM')")
+    parser.add_argument("--type", choices=['know', 'buy', 'do', 'news', 'global'], default='know', help="Content type (default: know)")
     
     args = parser.parse_args()
     
-    args = parser.parse_args()
-    
-    print(f"Starting article generation for keyword: {args.keyword}")
+    print(f"Starting article generation for keyword: {args.keyword} (Type: {args.type})")
     
     # 1. Initialize Gemini Client
     try:
@@ -85,7 +112,7 @@ def main():
         
     # 2. Generate Content
     print("Generating content with Gemini...")
-    generated_text = gemini.generate_article(args.keyword)
+    generated_text = gemini.generate_article(args.keyword, article_type=args.type)
     
     if not generated_text:
         print("Failed to generate content.")
