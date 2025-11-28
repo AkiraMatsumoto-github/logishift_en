@@ -12,6 +12,12 @@ DEFAULT_SOURCES = {
     "wsj_logistics": "https://feeds.a.dj.com/rss/RSSLogistics.xml",
     "supply_chain_dive": "https://www.supplychaindive.com/feeds/news/",
     "logistics_mgmt": "https://www.logisticsmgmt.com/rss/topic/technology",
+    "robot_report": "http://www.therobotreport.com/feed",
+    "supply_chain_brain": "https://www.supplychainbrain.com/rss/articles",
+    "freightwaves": "https://www.freightwaves.com/news/feed",
+    "lnews": "https://www.lnews.jp/feed/",
+    "logistics_today": "https://www.logi-today.com/feed",
+    "logi_biz": "https://online.logi-biz.com/feed/",
 }
 
 def fetch_rss(url, source_name):
