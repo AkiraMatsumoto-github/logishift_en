@@ -68,6 +68,10 @@ def save_to_file(title, content, keyword):
     filename = f"{date_str}_{safe_keyword}.md"
     filepath = os.path.join(output_dir, filename)
     
+    # Remove HTML tags from content before saving
+    content = re.sub(r'<br\s*/?>', '', content)  # Remove <br> tags  
+    content = re.sub(r'<[^>]+>', '', content)    # Remove other HTML tags
+    
     file_content = f"""---
 title: {title}
 date: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
@@ -147,6 +151,24 @@ def main():
     generated_image_path = gemini.generate_image(image_prompt, image_path, aspect_ratio="16:9")
     
     if generated_image_path:
+        # Resize Image to 800px width
+        try:
+            from PIL import Image
+            with Image.open(generated_image_path) as img:
+                target_width = 800
+                # Calculate height to maintain aspect ratio
+                w_percent = (target_width / float(img.size[0]))
+                h_size = int((float(img.size[1]) * float(w_percent)))
+                
+                # Resize using LANCZOS filter for high quality
+                img = img.resize((target_width, h_size), Image.Resampling.LANCZOS)
+                
+                # Save resized image
+                img.save(generated_image_path)
+                print(f"Resized image to {target_width}x{h_size}")
+        except Exception as e:
+            print(f"Warning: Failed to resize image: {e}")
+
         # Insert image at the top of the content
         image_markdown = f"![{args.keyword} Image]({image_filename})\n\n"
         content = image_markdown + content
@@ -222,7 +244,12 @@ def main():
                     else:
                         print(f"Failed to upload image: {image_filename}")
 
+
         # Convert Markdown to HTML
+        # Remove HTML tags (especially <br>) that interfere with Markdown table parsing
+        content = re.sub(r'<br\s*/?>', '', content)  # Remove <br> tags
+        content = re.sub(r'<[^>]+>', '', content)    # Remove other HTML tags
+        
         html_content = markdown.markdown(content, extensions=['extra', 'nl2br', 'tables'])
         
         # Determine status and date

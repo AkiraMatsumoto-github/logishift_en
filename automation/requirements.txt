@@ -4,3 +4,4 @@ feedparser
 python-dateutil
 markdown
 google-cloud-aiplatform
+Pillow
