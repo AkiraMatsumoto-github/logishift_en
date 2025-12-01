@@ -64,6 +64,8 @@ def main():
     sys.path.append(os.path.dirname(base_dir))
     from automation.collector import fetch_rss, DEFAULT_SOURCES
     from automation.scorer import score_article
+    from automation.url_reader import extract_content
+    from automation.summarizer import summarize_article
     
     collected_articles = []
     print(f"Collecting articles from last {args.days} days...")
@@ -120,20 +122,44 @@ def main():
         article_type = SOURCE_TYPE_MAPPING.get(source, "news")
         print(f"Type: {article_type}")
         
-        # Generate
-        # We use the title as the keyword for generation
+        # Generate keyword
         keyword = f"{article['title']}について"
         
         # Calculate schedule time
         schedule_time_str = schedule_times[count % len(schedule_times)]
         schedule_datetime = f"{next_day.strftime('%Y-%m-%d')} {schedule_time_str}"
         
+        # Base command
         cmd = [
             "python", os.path.join(base_dir, "generate_article.py"),
             "--keyword", keyword,
             "--type", article_type,
             "--schedule", schedule_datetime
         ]
+        
+        # News/Global articles: Context-based generation (URL reading + summarization)
+        if article_type in ["news", "global"]:
+            print("\n--- Context-based generation (URL reading + summarization) ---")
+            
+            try:
+                # Step 2.5-A: URL reading and summarization
+                article_content = extract_content(article['url'], article['source'])
+                
+                if article_content['content'] and "Error" not in article_content['title']:
+                    summary_data = summarize_article(article_content['content'], article['title'])
+                    
+                    # Pass context as JSON string
+                    context_json = json.dumps(summary_data, ensure_ascii=False)
+                    cmd.extend(["--context", context_json])
+                    print(f"Context created: {len(summary_data['summary'])} chars summary, {len(summary_data['key_facts'])} key facts")
+                else:
+                    print("Warning: Failed to extract content, falling back to keyword-based generation")
+            except Exception as e:
+                print(f"Error during context creation: {e}")
+                print("Falling back to keyword-based generation")
+        else:
+            print("\n--- Keyword-based generation (traditional) ---")
+            # Know/Buy/Do articles: No context (maintain current behavior)
         
         if args.dry_run:
             cmd.append("--dry-run")

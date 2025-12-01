@@ -37,6 +37,7 @@ class ArticleClassifier:
         - サプライチェーン (supply-chain)
         - 事例・インタビュー (case-studies)
         - ニュース・海外 (news-global)
+        ※ 海外の動向や事例に関する記事は、必ず「ニュース・海外 (news-global)」を選択してください。
         
         ## 2. 業種タグ (該当するものがあれば複数選択可、なければ空)
         - 製造業 (manufacturing)
@@ -54,12 +55,19 @@ class ArticleClassifier:
         - 環境・SDGs (environment-sdgs)
         - 安全・BCP (safety-bcp)
         - 補助金・助成金 (subsidy)
+
+        ## 4. 地域タグ (海外記事の場合のみ選択、該当なければ空)
+        - アメリカ (usa)
+        - ヨーロッパ (europe)
+        - 中国 (china)
+        - 東南アジア (southeast-asia)
         
         ## 出力フォーマット (JSONのみ)
         {{
             "category": "slug",
             "industry_tags": ["slug1", "slug2"],
-            "theme_tags": ["slug1", "slug2"]
+            "theme_tags": ["slug1", "slug2"],
+            "region_tags": ["slug1"]
         }}
         """
         
@@ -82,7 +90,8 @@ class ArticleClassifier:
             return {
                 "category": "logistics-dx",
                 "industry_tags": [],
-                "theme_tags": []
+                "theme_tags": [],
+                "region_tags": []
             }
 
 if __name__ == "__main__":

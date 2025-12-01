@@ -32,14 +32,32 @@ class GeminiClient:
             else:
                 raise ValueError("Missing Gemini credentials. Set GOOGLE_CLOUD_PROJECT/LOCATION or GEMINI_API_KEY in .env")
 
-    def generate_article(self, keyword, article_type="know"):
+    def generate_article(self, keyword, article_type="know", context=None):
         """
         Generate an article based on the keyword and content type.
         
         Args:
             keyword: Target keyword
             article_type: 'know' (default), 'buy', 'do', 'news', 'global'
+            context: Optional context dict with keys: summary, key_facts, logishift_angle
         """
+        
+        # Create context section if provided (for News/Global articles)
+        if context:
+            context_section = f"""
+【参考情報】
+以下の元記事の情報を基に、LogiShift読者向けの記事を作成してください。
+事実関係(数値、固有名詞、主張)は正確に反映してください。
+
+要約: {context['summary']}
+重要な事実: {', '.join(context['key_facts'])}
+LogiShift視点: {context['logishift_angle']}
+
+"""
+            print("Using context for article generation")
+        else:
+            context_section = ""
+            print("Generating from keyword only")
         
         prompts = {
             "know": f"""
@@ -161,7 +179,7 @@ class GeminiClient:
             """,
             
             "news": f"""
-            あなたは物流業界のニュースコメンテーターです。以下のキーワードに関する最新トレンドやニュース解説記事を執筆してください。
+            {context_section}あなたは物流業界のニュースコメンテーターです。以下のキーワードに関する最新トレンドやニュース解説記事を執筆してください。
             
             キーワード: {keyword}
             
@@ -198,7 +216,7 @@ class GeminiClient:
             """,
             
             "global": f"""
-            あなたは物流業界の海外トレンドウォッチャーです。以下のキーワードに関連する海外の最新事例やトレンドを紹介する記事を執筆してください。
+            {context_section}あなたは物流業界の海外トレンドウォッチャーです。以下のキーワードに関連する海外の最新事例やトレンドを紹介する記事を執筆してください。
             
             キーワード: {keyword}
             
