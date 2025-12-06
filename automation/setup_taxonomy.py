@@ -13,7 +13,11 @@ import requests
 def create_categories(wp):
     """Create all categories defined in content strategy."""
     categories = [
-        {"name": "物流DX・トレンド", "slug": "logistics-dx", "description": "物流業界の最新動向、法規制(2024年問題など)、DX全般の話題"},
+        {
+            "name": "物流DX・トレンド",
+            "slug": "logistics-dx",
+            "description": "物流DX（デジタルトランスフォーメーション）の最新トレンドから、2024年問題をはじめとする法規制への対応策、AI・IoT・ロボティクスを活用した次世代の物流戦略まで、業界変革に不可欠な情報を網羅。経営層や現場リーダーが知っておくべき、持続可能な物流構築のための実践的なノウハウをお届けします。"
+        },
         {"name": "倉庫管理・WMS", "slug": "warehouse-management", "description": "WMS、在庫管理、ピッキング、庫内作業の効率化"},
         {"name": "輸配送・TMS", "slug": "transportation", "description": "トラック輸送、配車計画(TMS)、ラストワンマイル、動態管理"},
         {"name": "マテハン・ロボット", "slug": "material-handling", "description": "自動倉庫、AGV/AMR、RFID、マテハン機器"},
@@ -22,19 +26,41 @@ def create_categories(wp):
         {"name": "ニュース・海外", "slug": "news-global", "description": "国内外のニュース解説、海外トレンド"},
     ]
     
-    print("Creating categories...")
+    print("Creating/Updating categories...")
     for cat in categories:
         try:
+            # 1. Try to create
             url = f"{wp.api_url}/categories"
             response = requests.post(url, json=cat, auth=wp.auth)
+            
             if response.status_code == 201:
                 print(f"✓ Created category: {cat['name']}")
             elif response.status_code == 400 and "term_exists" in response.text:
-                print(f"- Category already exists: {cat['name']}")
+                # 2. If exists, update
+                print(f"- Category already exists: {cat['name']}. Updating...")
+                
+                # Get existing category ID
+                # Since api_url already contains ?rest_route=..., we must use & for parameters
+                get_url = f"{wp.api_url}/categories&slug={cat['slug']}"
+                get_res = requests.get(get_url, auth=wp.auth)
+                
+                if get_res.status_code == 200 and len(get_res.json()) > 0:
+                    cat_id = get_res.json()[0]['id']
+                    update_url = f"{wp.api_url}/categories/{cat_id}"
+                    # Update description
+                    update_res = requests.post(update_url, json={'description': cat['description']}, auth=wp.auth)
+                    
+                    if update_res.status_code == 200:
+                         print(f"  ✓ Updated description for: {cat['name']}")
+                    else:
+                         print(f"  ✗ Failed to update description: {update_res.text}")
+                else:
+                    print(f"  ✗ Could not find existing category ID for slug: {cat['slug']}")
+
             else:
                 print(f"✗ Failed to create {cat['name']}: {response.text}")
         except Exception as e:
-            print(f"✗ Error creating {cat['name']}: {e}")
+            print(f"✗ Error processing {cat['name']}: {e}")
 
 def create_tags(wp):
     """Create all tags defined in content strategy."""
