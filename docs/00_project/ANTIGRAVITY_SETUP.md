@@ -56,8 +56,8 @@ GOOGLE_GENAI_USE_VERTEXAI=true
 # 使用するGoogle CloudプロジェクトID (各自のIDに書き換えてください)
 GOOGLE_CLOUD_PROJECT=231503280916
 
-# リージョン (Gemini 3 Proが利用可能なリージョン、例: us-central1)
-GOOGLE_CLOUD_LOCATION=us-central1
+# リージョン (Gemini 3 Proが利用可能なリージョン、例: global)
+GOOGLE_CLOUD_LOCATION=global
 ```
 
 > **Note:** ディレクトリ `~/.gemini` が存在しない場合は、`mkdir ~/.gemini` で作成してください。

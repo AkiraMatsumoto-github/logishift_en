@@ -138,7 +138,7 @@ jobs:
           echo "✅ デプロイ完了！"
 ```
 
-### ステップ2: SSH鍵を作成（まだない場合）
+<!-- ### ステップ2: SSH鍵を作成（まだない場合）
 
 ```bash
 # ローカルで実行
@@ -148,7 +148,7 @@ ssh-keygen -t ed25519 -C "github-actions@logishift.net" -f ~/.ssh/logishift_depl
 ssh-copy-id -i ~/.ssh/logishift_deploy.pub tarunosuke@logishift.net
 
 # 秘密鍵の内容を表示（GitHub Secretsに貼り付ける）
-cat ~/.ssh/logishift_deploy
+cat ~/.ssh/logishift_deploy -->
 ```
 
 ### ステップ3: GitHub Secretsを設定
