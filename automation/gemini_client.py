@@ -686,7 +686,7 @@ class GeminiClient:
         try:
             response = self._retry_request(
                 self.client.models.generate_content,
-                model='gemini-2.5-flash',
+                model='gemini-3-pro-preview',
                 contents=prompt,
                 config=types.GenerateContentConfig(
                     response_mime_type="application/json"
@@ -697,6 +697,65 @@ class GeminiClient:
         except Exception as e:
             print(f"Structured summary generation failed: {e}")
             return None
+
+    def generate_sns_content(self, title, content, article_type="know"):
+        """
+        Generate engaging SNS (Twitter/X) post content.
+        Output is JSON: {"hook": "...", "summary": "...", "hashtags": ["#tag1", ...]}
+        """
+        # Truncate content for efficiency
+        truncated_content = content[:3000]
+        
+        prompt = f"""
+        You are an expert social media manager for a logistics media site "LogiShift".
+        Create an engaging X (Twitter) post content based on the following article.
+        
+        Target Audience: Logistics professionals, warehouse managers, executives.
+        Goal: Maximize CTR (Click Through Rate) and engagement. Use "FOMO" (Fear Of Missing Out) or "High Benefit" appeal.
+
+        Article Title: {title}
+        Article Type: {article_type}
+        Content (excerpt):
+        {truncated_content}
+
+        Requirements:
+        1. **Hook**: A strong, catchy opening line. Use a question, a shocking fact, or a counter-intuitive statement. 
+           - MUST include 1 relevant emoji at the beginning or end.
+           - Max 50 chars.
+        2. **Summary**: A compelling teaser. Do NOT just summarize("〜について解説"). Explain "Why this matters" or "What they will lose by not reading".
+           - Focus on benefits (cost down, efficiency up, risk avoidance).
+           - Max 100 chars.
+        3. **Hashtags**: 3-5 relevant hashtags. Always include #LogiShift and #物流DX.
+        4. Language: Japanese. 
+        5. **Tone**: Professional but urgent/exciting. Avoid robotic or purely descriptive tone.
+
+        Output JSON format (Strictly JSON only):
+        {{
+            "hook": "😱 2024年問題、実はまだ間に合う？",
+            "summary": "「もう手遅れ」と諦めるのは早い。現場がすぐ取り組める3つの即効策を公開。知らないと損する物流DXの最前線とは？",
+            "hashtags": ["#LogiShift", "#物流DX", "#2024年問題", "#業務改善"]
+        }}
+        """
+        
+        try:
+            response = self._retry_request(
+                self.client.models.generate_content,
+                model='gemini-3-pro-preview',
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    response_mime_type="application/json"
+                )
+            )
+            import json
+            return json.loads(response.text)
+        except Exception as e:
+            print(f"SNS content generation failed: {e}")
+            # Fallback
+            return {
+                "hook": f"【新着記事】{title}",
+                "summary": "最新の物流トレンドを解説しました。詳細はこちらをチェック！",
+                "hashtags": ["#LogiShift", "#物流"]
+            }
 
 if __name__ == "__main__":
     # Test generation

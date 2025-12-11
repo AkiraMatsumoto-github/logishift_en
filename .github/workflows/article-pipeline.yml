@@ -2,9 +2,9 @@ name: Article Generation Pipeline
 
 on:
   schedule:
-    # 6時間ごとに実行 (0:00, 6:00, 12:00, 18:00 UTC)
-    # 日本時間では 9:00, 15:00, 21:00, 3:00
-    - cron: '0 */6 * * *'
+    # 3時間ごとに実行 (0:00, 3:00, 6:00, 9:00 UTC)
+    # 日本時間では 9:00, 12:00, 15:00, 18:00
+    - cron: '0 */3 * * *'
   workflow_dispatch: # 手動実行も可能
 
 jobs:
@@ -32,6 +32,13 @@ jobs:
           WP_URL: ${{ secrets.WP_URL }}
           WP_USER: ${{ secrets.WP_USER }}
           WP_APP_PASSWORD: ${{ secrets.WP_APP_PASSWORD }}
+          # X (Twitter) Credentials
+          X_API_KEY: ${{ secrets.X_API_KEY }}
+          X_API_SECRET: ${{ secrets.X_API_SECRET }}
+          X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+          X_ACCESS_TOKEN_SECRET: ${{ secrets.X_ACCESS_TOKEN_SECRET }}
+          # Google Cloud / Gemini
+          GOOGLE_CLOUD_LOCATION: "global"
         run: |
           cd automation
           python pipeline.py --hours 6 --threshold 75 --limit 3

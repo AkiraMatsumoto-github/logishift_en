@@ -418,7 +418,7 @@ Select the most relevant ones (if any) and include them in the article using sta
                 sys.exit(1)
         else:
             schedule_date = None
-            status = "draft"
+            status = "publish"
         
         # Prepare metadata for SEO plugins (Yoast/All in One SEO)
         meta_fields = {}
@@ -444,6 +444,46 @@ Select the most relevant ones (if any) and include them in the article using sta
         if result:
             print(f"Successfully created post. ID: {result.get('id')}")
             print(f"Link: {result.get('link')}")
+            
+            # --- SNS Posting (X/Twitter) ---
+            # Only post if status is 'publish' (not 'future' or 'draft')
+            if status == "publish" and not args.dry_run:
+                try:
+                    try:
+                        from automation.sns_client import SNSClient
+                    except ImportError:
+                        from sns_client import SNSClient
+                    print("Initializing SNS Client...")
+                    sns = SNSClient()
+                    
+                    if sns.x_client:
+                        print("Generating SNS content...")
+                        sns_content_data = gemini.generate_sns_content(optimized_title, content, args.type)
+                        
+                        if sns_content_data:
+                            # Construct post text
+                            post_text = f"【新着記事】\n{sns_content_data.get('hook', optimized_title)}\n\n"
+                            post_text += f"{sns_content_data.get('summary', '')}\n\n"
+                            
+                            tags = sns_content_data.get('hashtags', [])
+                            if tags:
+                                post_text += " ".join(tags) + "\n\n"
+                                
+                            post_text += result.get('link')
+                            
+                            print("--------------------------------------------------")
+                            print(f"Posting to X:\n{post_text}")
+                            print("--------------------------------------------------")
+                            
+                            sns.post_to_x(post_text)
+                        else:
+                             print("Failed to generate SNS content data.")
+                    else:
+                        print("Skipping X post: Client not authenticated (Check .env)")
+                        
+                except Exception as e:
+                    print(f"SNS Posting failed: {e}")
+            # -------------------------------
         else:
             print("Failed to create post.")
 

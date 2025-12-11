@@ -49,50 +49,45 @@ AIは以下のキャラクター設定に基づいて記事を生成する。
 > [!IMPORTANT]
 > Phase 2.5は段階的に実装します。まずは記事品質の向上（2.5-A）を優先し、その後SEO最適化（2.5-B）、最後に運用自動化（2.5-C）へと進めます。
 
-#### Phase 2.5-A: URL Reader + Summarizer - **🎯 最優先**
+#### Phase 2.5-A: URL Reader + Summarizer - **✅ Completed**
 **目的**: 元記事の内容を正確に反映させ、ハルシネーション（事実誤認）を防ぐ。
 
-**実装内容:**
-1. **URL Reader**: 高スコア記事の元URLから本文を抽出
-   - BeautifulSoupによるスクレイピング、またはGeminiのURL読み込み機能を使用
-   - 主要なニュースサイトのHTML構造に対応
-2. **Summarizer**: 元記事を要約し、重要な事実を抽出
-   - Geminiに「要約」「重要な数値・固有名詞」「主要な主張」を抽出させる
-   - LogiShift視点のコメント（DXエバンジェリストとしての解釈）を付加
-3. **Context Injection**: `generate_article.py` を改修
-   - 抽出した情報を `context` としてプロンプトに含める
-   - 「以下の事実に基づいて記事を書いてください」という指示に変更
+**実装実績:**
+1. **URL Reader**: `url_reader.py` を実装。`Trafilatura` や `BeautifulSoup` を用いて本文を抽出。
+2. **Summarizer**: `summarizer.py` を実装。Geminiを用いて記事の内容を要約し、重要なファクトを抽出。
+3. **Context Injection**: `generate_article.py` に組み込み済み。ニュース・海外記事タイプの場合、自動的に要約データをコンテキストとして使用。
 
 **期待効果:**
 - 具体的な数値や事例を含む、信頼性の高い記事が生成される
 - 「タイトルから推測」による一般論記事から脱却
 - ニュース解説・海外トレンド記事の品質が大幅に向上
 
-#### Phase 2.5-B: Internal Link Suggester - **次のステップ**
+#### Phase 2.5-B: Internal Link Suggester - **✅ Completed**
 **目的**: 内部リンク最適化によるSEO強化とサイト回遊性の向上。
 
-**実装内容:**
-1. **WordPress記事取得**: WordPress APIから既存記事のタイトル・URL・抜粋を取得
-2. **関連性スコアリング**: Geminiで新規記事と既存記事の関連性を評価（0-100点）
-3. **リンク自動挿入**: 高関連度（80点以上）の記事へのリンクを本文に自動挿入
-4. **双方向リンク**: 既存記事にも逆リンクを追加（要慎重な設計）
+**実装実績:**
+1. **実装済み (`internal_linker.py`)**:
+   - WordPress APIから公開済み記事を取得。
+   - Geminiを用いて、新規記事のトピックと関連性の高い記事（スコア80点以上）を抽出。
+2. **Contextへの統合**:
+   - 抽出された関連時記事の要約を生成プロンプトに含め、記事本文中で自然に言及・リンク設置を行うよう指示。
 
-**注意点:**
-- 既存記事の自動編集はリスクがあるため、まずは「新規記事→既存記事」の一方向リンクから開始
-- 逆リンク機能は人間のレビュー後に実装を検討
-
-#### Phase 2.5-C: Automation & Notification - **最後**
+#### Phase 2.5-C: Automation & Notification - **✅ Completed**
 **目的**: 完全自律運用の実現。
 
-**実装内容:**
-1. **スケジュール実行**: cron/GitHub Actionsで毎朝8:00に自動実行
-2. **Slack通知**: 「○件の下書きを作成しました」と通知
-3. **エラーハンドリング**: 失敗時のリトライ・ログ記録
+**実装実績:**
+1. **GitHub Actions**: `article-pipeline.yml` を実装。3時間ごとに自動実行。
+2. **パイプライン統合**: 収集→スコアリング→生成→公開までを `pipeline.py` で一元管理。
 
-**運用イメージ:**
-- 毎朝8:00に自動実行
-- 高スコア記事（85点以上）を自動で下書き化
-- 人間は最終チェック＆公開のみ
+#### Phase 2.5-D: SNS Automation - **✅ Completed**
+**目的**: 記事公開と連動したSNS拡散による流入獲得。
+
+**実装実績:**
+1. **X (Twitter) 連携**: `sns_client.py` を実装（Tweepy利用）。
+2. **AI投稿文生成**: 
+   - 記事タイトルと本文から、クリック率（CTR）を高めるための「フック（問いかけ）」や「FOMO（逃すと損する）訴求」を含む投稿文をGeminiで生成。
+   - 絵文字やハッシュタグも自動最適化。
+3. **自動投稿フロー**: WordPressへの記事公開（status=publish）成功時のみ、自動的にXへ投稿。
 
 ### Phase 3: "The Synthesizer" (週次・月次レポート)
 **目的**: ストック情報の資産化。
@@ -106,7 +101,7 @@ AIは以下のキャラクター設定に基づいて記事を生成する。
 ### 実装された機能
 1.  **Article Generator (`generate_article.py`)**:
     *   キーワードに基づき、タイトル・構成案・本文をステップバイステップで生成。
-    *   Gemini 1.5 Pro/Flash を活用し、4,000文字程度の充実したコンテンツを作成。
+    *   Gemini 3 Pro preview を活用し、4,000文字程度の充実したコンテンツを作成。
 2.  **WordPress Integrator (`wp_client.py`)**:
     *   Application Passwords認証を用いたREST API連携。
     *   投稿ステータス（draft/future）の制御。
@@ -130,14 +125,20 @@ AIは以下のキャラクター設定に基づいて記事を生成する。
     *   `Collector` -> `Scorer` -> (80点以上) -> `Generator` という一連の流れを制御。
 
 ### 実行方法 (Execution Method)
-まずは手動実行から開始し、安定稼働後に自動化へ移行します。
 
-1.  **Step 1: 手動実行 (Manual CLI)**
-    *   **コマンド**: `python automation/collector.py --source "techcrunch,wsj"`
-    *   **運用**: 毎朝、担当者がコマンドを叩いてニュースを収集・選別し、生成された下書きを確認する。
-    *   **目的**: 選別ロジック（スコアリング）の精度を目視で確認・調整するため。
+**Current Status: 完全自動化稼働中**
 
-2.  **Step 2: 自動実行 (Scheduled Automation)**
-    *   **ツール**: `cron` (Mac/Linux) または GitHub Actions (Schedule Event)。
-    *   **運用**: 毎日AM 8:00に自動実行。Slack等に「○件の記事を下書き保存しました」と通知。
-    *   **目的**: 完全な自律運用。
+1.  **Scheduled Automation (GitHub Actions)**
+    - **スケジュール**: 3時間ごとに実行。
+    - **フロー**:
+        1.  直近のニュースを収集 (`collector`)
+        2.  Geminiによるスコアリング (`scorer`)
+        3.  高スコア記事があれば記事生成・公開 (`generator`)
+        4.  WordPress公開と同時にX投稿 (`sns_client`)
+
+2.  **Manual Execution (Debugging/One-off)**
+    - 特定のトピック記事を作成したい場合:
+    ```bash
+    export GOOGLE_CLOUD_LOCATION=global
+    python3 automation/generate_article.py --keyword "任意のテーマ" --type "know"
+    ```
