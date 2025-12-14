@@ -725,7 +725,10 @@ class GeminiClient:
         2. **Summary**: A compelling teaser. Do NOT just summarize("〜について解説"). Explain "Why this matters" or "What they will lose by not reading".
            - Focus on benefits (cost down, efficiency up, risk avoidance).
            - Max 100 chars.
-        3. **Hashtags**: 3-5 relevant hashtags. Always include #LogiShift and #物流DX.
+        3. **Hashtags**: 3-5 relevant hashtags.
+           - **CRITICAL**: To maximize Impressions (Imp), PRIORITIZE using **specific proper nouns** (Company names, Product names, Technology names) mentioned in the article content over generic terms.
+           - Example: Use "#Amazon" or "#RFID" instead of generic tags.
+
         4. Language: Japanese. 
         5. **Tone**: Professional but urgent/exciting. Avoid robotic or purely descriptive tone.
 
@@ -733,7 +736,7 @@ class GeminiClient:
         {{
             "hook": "😱 2024年問題、実はまだ間に合う？",
             "summary": "「もう手遅れ」と諦めるのは早い。現場がすぐ取り組める3つの即効策を公開。知らないと損する物流DXの最前線とは？",
-            "hashtags": ["#LogiShift", "#物流DX", "#2024年問題", "#業務改善"]
+            "hashtags": ["#LogiShift", "#Amazon", "#RFID", "#物流DX"]
         }}
         """
         
