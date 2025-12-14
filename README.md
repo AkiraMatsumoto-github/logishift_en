@@ -183,7 +183,7 @@ python automation/generate_static_pages.py --all
 
 #### gcloud 認証ができてない
 ```bash 
-gcloud auth login
+gcloud auth application-default login
 ```
 
 #### パーミッションエラーでテーマが反映されない

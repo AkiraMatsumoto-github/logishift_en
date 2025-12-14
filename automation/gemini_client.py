@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 import time
 import random
 
-load_dotenv()
+load_dotenv(override=True)
 
 class GeminiClient:
     def __init__(self):
