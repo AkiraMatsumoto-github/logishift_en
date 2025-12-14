@@ -322,3 +322,20 @@ function logishift_archive_title( $title ) {
     return $title;
 }
 add_filter( 'get_the_archive_title', 'logishift_archive_title' );
+
+/**
+ * View Controller for Popular Articles.
+ */
+require get_template_directory() . '/inc/view-controller.php';
+
+/**
+ * Initialize Popular Articles DB Table.
+ * Runs on init to check if table needs creation/update.
+ */
+function logishift_initialize_popular_articles() {
+    $current_version = get_option( 'logishift_view_table_version' );
+    if ( version_compare( $current_version, '1.0.0', '<' ) ) {
+        logishift_create_view_table();
+    }
+}
+add_action( 'init', 'logishift_initialize_popular_articles' );

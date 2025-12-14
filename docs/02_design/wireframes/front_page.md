@@ -16,7 +16,7 @@
 | "物流DXで未来を創る LogiShift"                                        |
 | [ 最新記事を読む (Flat Button) ]                                      |
 +-----------------------------------------------------------------------+
-| [Featured Articles] (注目記事)                                        |
+| [Featured Articles] (最新記事)                                        |
 | +-----------+ +-----------+ +-----------+                             |
 | | [Thumb]   | | [Thumb]   | | [Thumb]   |                             |
 | | Title...  | | Title...  | | Title...  |                             |
@@ -62,7 +62,7 @@
 +---------------------------------------+
 | [Hero Section]                        |
 +---------------------------------------+
-| [Featured Articles] (注目記事)        |
+| [Featured Articles] (最新記事)        |
 | (Stack Layout - Horizontal Card)      |
 | +-----------------------------------+ |
 | | [Thumb] | [Category]              | |

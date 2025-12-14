@@ -1259,6 +1259,44 @@ section {
     transform: scale(1.05);
 }
 
+/* Rank Badge for Popular Articles */
+.rank-badge {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 36px;
+    height: 36px;
+    background: #333;
+    color: #fff;
+    font-weight: bold;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    border-bottom-right-radius: 8px;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.rank-badge.rank-1 {
+    background: #E6B422;
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+}
+
+/* Gold */
+.rank-badge.rank-2 {
+    background: #8e9eab;
+}
+
+/* Silver */
+.rank-badge.rank-3 {
+    background: #B87333;
+}
+
+/* Bronze */
+
 .featured-content {
     padding: var(--spacing-xl);
 }
@@ -1722,4 +1760,108 @@ section {
 #block-4.widget_block,
 .wp-block-latest-comments {
     display: none !important;
+}
+
+/* ------------------------------------------------------------------------- *
+ *  Popular Posts Widget
+ * ------------------------------------------------------------------------- */
+.widget_popular_posts .popular-post-item {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+}
+
+.widget_popular_posts .popular-post-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.popular-post-link {
+    display: flex;
+    align-items: flex-start;
+    text-decoration: none;
+    color: inherit;
+    gap: 12px;
+}
+
+.popular-post-rank {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    background: #eee;
+    color: #555;
+    font-size: 12px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    margin-top: 2px;
+}
+
+.popular-post-rank.rank-1 {
+    background: #E6B422;
+    color: #fff;
+}
+
+/* Gold */
+.popular-post-rank.rank-2 {
+    background: #8e9eab;
+    color: #fff;
+}
+
+/* Silver */
+.popular-post-rank.rank-3 {
+    background: #B87333;
+    color: #fff;
+}
+
+/* Bronze */
+
+.popular-post-thumb {
+    flex-shrink: 0;
+    width: 80px;
+    height: 60px;
+    overflow: hidden;
+    border-radius: 4px;
+    position: relative;
+    background: #f0f0f0;
+}
+
+.popular-post-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.no-image-placeholder {
+    width: 100%;
+    height: 100%;
+    background-color: #f0f0f0;
+}
+
+.popular-post-content {
+    flex-grow: 1;
+}
+
+.popular-title {
+    font-size: 14px;
+    line-height: 1.4;
+    margin: 0 0 4px;
+    font-weight: bold;
+    color: #2c3e50;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.popular-post-link:hover .popular-title {
+    color: #3498db;
+}
+
+.popular-views {
+    font-size: 11px;
+    color: #888;
+    display: block;
 }
