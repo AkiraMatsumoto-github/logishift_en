@@ -43,7 +43,7 @@ SUMMARIZATION_PROMPT = """あなたは物流業界のDXエバンジェリスト�
 """
 
 
-def summarize_article(content: str, title: str, model_name: str = "gemini-2.5-flash") -> dict:
+def summarize_article(content: str, title: str, model_name: str = "gemini-3-pro-preview") -> dict:
     """
     Summarize article content and extract key facts.
     

@@ -39,7 +39,7 @@ class ArticleClassifier:
         - ニュース・海外 (news-global)
         ※ 海外の動向や事例に関する記事は、必ず「ニュース・海外 (news-global)」を選択してください。
         
-        ## 2. 業種タグ (該当するものがあれば複数選択可、なければ空)
+        ## 2. 業種タグ (該当するものがあれば1つのみ選択、なければ空)
         - 製造業 (manufacturing)
         - 小売・流通 (retail)
         - EC・通販 (ecommerce)
@@ -56,7 +56,7 @@ class ArticleClassifier:
         - 安全・BCP (safety-bcp)
         - 補助金・助成金 (subsidy)
 
-        ## 4. 地域タグ (海外記事の場合のみ選択、該当なければ空)
+        ## 4. 地域タグ (海外記事の場合に1つのみ選択、該当なければ空)
         - アメリカ (usa)
         - ヨーロッパ (europe)
         - 中国 (china)
@@ -73,7 +73,7 @@ class ArticleClassifier:
         
         try:
             response = self.gemini.client.models.generate_content(
-                model='gemini-2.5-pro',
+                model='gemini-3-pro-preview',
                 contents=prompt,
                 config={
                     'response_mime_type': 'application/json'
@@ -139,7 +139,7 @@ class ArticleClassifier:
 
         try:
             response = self.gemini.client.models.generate_content(
-                model='gemini-2.5-flash',
+                model='gemini-3-pro-preview',
                 contents=prompt,
                 config={
                     'response_mime_type': 'text/plain'

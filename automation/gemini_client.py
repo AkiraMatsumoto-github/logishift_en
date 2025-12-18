@@ -377,7 +377,7 @@ class GeminiClient:
         try:
             response = self._retry_request(
                 self.client.models.generate_content,
-                model='gemini-2.5-pro',
+                model='gemini-3-pro-preview',
                 contents=prompt
             )
             return response.text
@@ -486,7 +486,7 @@ class GeminiClient:
         try:
             response = self._retry_request(
                 self.client.models.generate_content,
-                model='gemini-2.5-pro',
+                model='gemini-3-pro-preview',
                 contents=prompt
             )
             return response.text.strip()
@@ -517,7 +517,7 @@ class GeminiClient:
         try:
             response = self._retry_request(
                 self.client.models.generate_content,
-                model='gemini-2.5-pro',
+                model='gemini-3-pro-preview',
                 contents=prompt,
                 config=types.GenerateContentConfig(
                     response_mime_type="application/json"
@@ -654,7 +654,7 @@ class GeminiClient:
         try:
             response = self._retry_request(
                 self.client.models.generate_content,
-                model='gemini-2.5-pro',
+                model='gemini-3-pro-preview',
                 contents=prompt
             )
             return response.text
