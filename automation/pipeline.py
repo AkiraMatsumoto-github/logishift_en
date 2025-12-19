@@ -133,7 +133,7 @@ def main():
         print(f"Type: {article_type}")
         
         # Generate keyword
-        keyword = f"{article['title']}について"
+        keyword = article['title']
         
         # Base command
         cmd = [
