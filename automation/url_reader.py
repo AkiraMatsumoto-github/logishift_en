@@ -53,6 +53,46 @@ CONTENT_SELECTORS = {
         "title": "h1.entry-title",
         "author": "a.author",
     },
+    "robot_report": {
+        "content": "div.entry-content",
+        "title": "h1",
+        "author": ".entry-author",
+    },
+    "supply_chain_brain": {
+        "content": "div.editorial-content__body", # Updated from div.body
+        "title": "h1",
+        "author": ".author",
+    },
+    "robotics_automation_news": {
+        "content": "div.entry-content",
+        "title": "h1",
+        "author": ".entry-author",
+    },
+    "36kr_japan": {
+        "content": "div.entry-content",
+        "title": "h1",
+        "author": ".post-author",
+    },
+    "pandaily": {
+        "content": "div.prose",
+        "title": "h1",
+        "author": "div.flex.items-center span",
+    },
+    "the_loadstar": {
+        "content": "div.entry-content", # Changed from article-body
+        "title": "h1",
+        "author": ".author",
+    },
+    "logistics_manager_uk": {
+        "content": "div.entry-content",
+        "title": "h1",
+        "author": "a[rel='author']",
+    },
+    "supply_chain_asia": {
+        "content": "div.entry-content",
+        "title": "h1",
+        "author": ".author",
+    },
 }
 
 
@@ -102,8 +142,10 @@ def extract_content(url: str, source: str) -> Dict[str, str]:
             for tag in content_elem.find_all(['script', 'style', 'nav', 'aside']):
                 tag.decompose()
             content = content_elem.get_text(separator='\n', strip=True)
-        else:
-            print(f"Warning: Could not find content with selector '{selectors['content']}'")
+        
+        # If content selector found nothing or text is empty, try fallback
+        if not content_elem or not content:
+            print(f"Warning: Content selector '{selectors['content']}' yielded empty result. Using fallback.")
             # Fallback: get all paragraphs
             paragraphs = soup.find_all('p')
             content = '\n'.join([p.get_text(strip=True) for p in paragraphs])
