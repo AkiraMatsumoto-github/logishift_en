@@ -30,14 +30,13 @@ class ArticleClassifier:
         Summary: {content_summary}
 
         ## 1. Category (Select EXACTLY ONE)
-        - Logistics DX & Trends (logistics-dx)
-        - Warehouse Management / WMS (warehouse-management)
-        - Transportation / TMS (transportation)
-        - Material Handling / Robots (material-handling)
-        - Supply Chain (supply-chain)
+        - Global Trends (global-trends)
+        - Technology & DX (technology-dx)
+        - Cost & Efficiency (cost-efficiency)
+        - Supply Chain Management (scm)
         - Case Studies (case-studies)
-        - Global News (news-global)
-        * Note: If the content is about non-domestic trends or case studies, MUST select "Global News (news-global)".
+        - Logistics Startups (startups)
+        * Note: If the content is about non-domestic trends or case studies, MUST select "Global Trends (global-trends)".
 
         ## 2. Industry Tags (Select 1 if applicable, else empty)
         - Manufacturing (manufacturing)
@@ -51,16 +50,17 @@ class ArticleClassifier:
         ## 3. Theme Tags (Select multiple if applicable, else empty)
         - Cost Reduction (cost-reduction)
         - Labor Shortage (labor-shortage)
-        - Quality Improvement (quality-improvement)
-        - Sustainability / ESG (environment-sdgs)
+        - Kaizen / Quality Improvement (kaizen)
+        - Sustainability (sustainability)
+        - Warehouse Automation (automation)
+        - Last Mile (last-mile)
         - Safety / BCP (safety-bcp)
         - Subsidy (subsidy)
 
-        ## 4. Region Tags (Select 1 if it's global news, else empty)
+        ## 4. Region Tags (Select 1 if a specific region is the primary focus, else empty)
         - USA / North America (usa)
         - Europe (europe)
-        - China (china)
-        - Southeast Asia (southeast-asia)
+        - Asia-Pacific (asia-pacific)
         - Japan (japan)
 
         ## Output Format (Strict JSON)
@@ -89,7 +89,7 @@ class ArticleClassifier:
             print(f"Classification failed: {e}")
             # Default fallback
             return {
-                "category": "logistics-dx",
+                "category": "technology-dx",
                 "industry_tags": [],
                 "theme_tags": [],
                 "region_tags": []
@@ -129,10 +129,10 @@ class ArticleClassifier:
         2. buy   (Comparison/Selection: "Top 10 WMS", "How to choose", comparison guides)
         3. do    (Practical/Case Study: "Success Stories", "How-to guides", "Road to Zero Errors")
         4. news  (Domestic News: Latest administrative trends, press releases, personnel changes - time sensitive)
-        5. global (Global News: Overseas trends, global case studies, tech not yet in domestic market)
+        5. global (Global News: International supply chain trends, cross-border logistics, and multi-region analysis)
 
         ## Decision Rules
-        - If it mentions overseas countries or foreign companies -> "global"
+        - If it covers multiple regions or international trade -> "global"
         - If "Comparison", "Selection", "Recommended" -> "buy"
         - If "Case Study", "Success", "Practical" -> "do"
         - If "What is", "Mechanism", "Benefits" (Fundamentals) -> "know"
@@ -166,9 +166,4 @@ class ArticleClassifier:
         except Exception as e:
             print(f"Type classification failed: {e}")
             return "news" # Safe fallback
-if __name__ == "__main__":
-    # Test
-    classifier = ArticleClassifier()
-    sample_title = "最新の自動倉庫システム導入でピッキング効率が30%向上"
-    sample_summary = "A社は最新のシャトル型自動倉庫を導入し、EC物流センターのピッキング作業を自動化。人手不足を解消しつつ、誤出荷ゼロを達成した。"
-    print(json.dumps(classifier.classify_article(sample_title, sample_summary), indent=2, ensure_ascii=False))
+

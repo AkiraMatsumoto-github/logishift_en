@@ -50,6 +50,13 @@ class SNSClient:
             response = self.x_client.create_tweet(text=content)
             print(f"Posted to X successfully. ID: {response.data['id']}")
             return response.data
+        except tweepy.errors.Forbidden as e:
+            print(f"Failed to post to X: 403 Forbidden.")
+            print(f"Details: {e}")
+            print("Possible causes:")
+            print("1. App permissions are 'Read' only. Check Developer Portal > User authentication settings > App permissions -> set to 'Read and Write'.")
+            print("2. Duplicate content. Twitter blocks identical tweets.")
+            return None
         except Exception as e:
             print(f"Failed to post to X: {e}")
             return None

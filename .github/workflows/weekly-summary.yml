@@ -2,8 +2,8 @@ name: Weekly Summary Generation
 
 on:
   schedule:
-    # 毎週月曜 07:00 JST (日曜 22:00 UTC)
-    - cron: '0 22 * * 0'
+    # 毎週月曜 06:00 NY (月曜 11:00 UTC)
+    - cron: '0 11 * * 1'
   workflow_dispatch: # 手動実行
 
 jobs:

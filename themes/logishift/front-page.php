@@ -378,6 +378,90 @@ get_header();
 		</div>
 	</section>
 
+	<!-- Industry Tags (New) -->
+	<section class="industry-tags-section" style="background-color: var(--color-light-gray);">
+		<div class="container">
+			<div class="section-header">
+				<h2 class="section-title"><?php esc_html_e( 'Search by Industry', 'logishift' ); ?></h2>
+			</div>
+
+			<?php
+			$industry_tags = array(
+				array( 'slug' => 'manufacturing', 'name' => 'Manufacturing' ),
+				array( 'slug' => 'retail', 'name' => 'Retail' ),
+				array( 'slug' => 'ecommerce', 'name' => 'eCommerce' ),
+				array( 'slug' => '3pl-warehouse', 'name' => '3PL / Warehousing' ),
+				array( 'slug' => 'food-beverage', 'name' => 'Food & Beverage' ),
+				array( 'slug' => 'apparel', 'name' => 'Apparel' ),
+				array( 'slug' => 'medical', 'name' => 'Medical / Pharma' ),
+			);
+			?>
+
+			<!-- Industry Tabs -->
+			<div class="region-filter-tabs industry-tabs">
+				<?php foreach ( $industry_tags as $index => $ind_tag ) : 
+					$active_class = $index === 0 ? 'active' : '';
+				?>
+					<button class="region-tab <?php echo $active_class; ?>" data-industry="<?php echo esc_attr( $ind_tag['slug'] ); ?>">
+						<?php echo esc_html( $ind_tag['name'] ); ?>
+					</button>
+				<?php endforeach; ?>
+			</div>
+
+			<!-- Industry Content Blocks -->
+			<div class="industry-content-container">
+				<?php foreach ( $industry_tags as $index => $ind_tag ) : 
+					$display_style = $index === 0 ? 'block' : 'none';
+				?>
+					<div class="industry-tag-block" id="industry-block-<?php echo esc_attr( $ind_tag['slug'] ); ?>" style="display: <?php echo $display_style; ?>;">
+						<div class="article-grid">
+							<?php
+							$ind_args = array(
+								'tag'            => $ind_tag['slug'],
+								'posts_per_page' => 3, 
+								'orderby'        => 'date',
+								'order'          => 'DESC',
+							);
+							$ind_query = new WP_Query( $ind_args );
+
+							if ( $ind_query->have_posts() ) :
+								while ( $ind_query->have_posts() ) :
+									$ind_query->the_post();
+									?>
+									<article id="post-<?php the_ID(); ?>" <?php post_class( 'article-card' ); ?>>
+										<div class="article-thumbnail">
+											<?php if ( has_post_thumbnail() ) : ?>
+												<a href="<?php the_permalink(); ?>"><?php the_post_thumbnail( 'medium' ); ?></a>
+											<?php else : ?>
+												<a href="<?php the_permalink(); ?>"><div class="no-image"></div></a>
+											<?php endif; ?>
+										</div>
+										<div class="article-content">
+											<div class="article-meta">
+												<span class="posted-on"><?php echo get_the_date(); ?></span>
+											</div>
+											<h3 class="article-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+										</div>
+									</article>
+									<?php
+								endwhile;
+								wp_reset_postdata();
+							else:
+								echo '<p>' . esc_html__( 'No posts found.', 'logishift' ) . '</p>';
+							endif;
+							?>
+						</div>
+						<div style="text-align: right; margin-top: 24px;">
+							<a href="<?php echo esc_url( get_tag_link( get_term_by( 'slug', $ind_tag['slug'], 'post_tag' ) ) ); ?>" class="text-link-arrow">
+								<?php esc_html_e( 'View More', 'logishift' ); ?> →
+							</a>
+						</div>
+					</div>
+				<?php endforeach; ?>
+			</div>
+		</div>
+	</section>
+
 	<!-- Theme-based Tag Sections (Topics) -->
 	<section class="theme-tags-section">
 		<div class="container">
@@ -535,7 +619,30 @@ document.addEventListener('DOMContentLoaded', function() {
 		filterArticles(selectedRegion);
 	});
 
-	// 2. Theme Tabs Logic
+	// 2. Industry Tabs Logic
+	const industryTabs = document.querySelectorAll('.industry-tabs .region-tab');
+	const industryBlocks = document.querySelectorAll('.industry-tag-block');
+
+	industryTabs.forEach(tab => {
+		tab.addEventListener('click', function() {
+			const selectedIndustry = this.getAttribute('data-industry');
+
+			// Switch Tabs
+			industryTabs.forEach(t => t.classList.remove('active'));
+			this.classList.add('active');
+
+			// Switch Content
+			industryBlocks.forEach(block => {
+				if (block.id === 'industry-block-' + selectedIndustry) {
+					block.style.display = 'block';
+				} else {
+					block.style.display = 'none';
+				}
+			});
+		});
+	});
+
+	// 3. Theme Tabs Logic
 	const themeTabs = document.querySelectorAll('.theme-tabs .region-tab');
 	const themeBlocks = document.querySelectorAll('.theme-tag-block');
 

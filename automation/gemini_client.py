@@ -143,6 +143,7 @@ class GeminiClient:
             
             ## Title Generation Rules
             - **Goal**: Maximize CTR.
+            - **Language**: STRICTLY English. NO Japanese characters allowed.
             - **Length**: STRICTLY under 60 characters.
             - **Structure**:
                 1. Keyword at the start.
@@ -186,6 +187,7 @@ class GeminiClient:
             
             ## Title Rules
             - **Goal**: Capture "Buy" intent.
+            - **Language**: STRICTLY English. NO Japanese characters allowed.
             - **Length**: STRICTLY under 60 characters.
             - **Elements**: Keyword, Numbers ("Top 10"), Year ("2025").
             - **Examples**:
@@ -217,6 +219,7 @@ class GeminiClient:
             
             ## Title Rules
             - **Goal**: Solves "Do" intent (Actionable).
+            - **Language**: STRICTLY English. NO Japanese characters allowed.
             - **Length**: STRICTLY under 60 characters.
             - **Elements**: Keyword, Benefit ("Zero Errors"), Action ("How to").
             - **Examples**:
@@ -251,6 +254,7 @@ class GeminiClient:
             
             ## Title Rules
             - **Goal**: High Impact & CTR.
+            - **Language**: STRICTLY English. NO Japanese characters allowed.
             - **Length**: STRICTLY under 60 characters.
             - **Elements**: Keyword, Insight/Impact.
             - **Examples**:
@@ -285,6 +289,7 @@ class GeminiClient:
             
             ## Title Rules
             - **Goal**: Intrigue and Relevance.
+            - **Language**: STRICTLY English. NO Japanese characters allowed.
             - **Length**: STRICTLY under 60 characters.
             - **Elements**: Keyword, Global Scale, Innovation.
             - **Examples**:
@@ -327,6 +332,7 @@ class GeminiClient:
             - Approx. 2000+ words.
             
             ## Title Rules
+            - **Language**: STRICTLY English. NO Japanese characters allowed.
             - Format: Weekly LogiShift: [Date Range] | [Abstract Theme]
             - Example: Weekly LogiShift: Dec 13-20 | The Shift to Autonomous Supply Chains
             """
