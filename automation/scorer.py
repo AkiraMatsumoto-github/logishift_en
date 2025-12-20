@@ -21,46 +21,44 @@ except ImportError:
     from automation.gemini_client import GeminiClient
 
 # Editorial Persona and Scoring Criteria
-SCORING_PROMPT = """あなたは物流業界のDXエバンジェリスト「LogiShift編集長」です。
-ターゲット読者である「物流倉庫の管理者」「3PL企業の経営層」にとって、以下の記事が有益かどうかを評価してください。
+SCORING_PROMPT = """You are the "Editor-in-Chief" of LogiShift Global, a logistics DX media.
+Evaluate whether the following article is beneficial for our target audience: "Logistics Warehouse Managers" and "Supply Chain Executives (Global)".
 
-【ターゲットペルソナ】
-- 属性: 物流現場の責任者、または経営層
-- 課題: 2024年問題（人手不足）、コスト削減、アナログ管理からの脱却
-- 関心: 業界動向、効率化手法、他社の事例、最新技術（自動化・ロボット）
+【Target Persona】
+- Role: Logistics Operations Manager or C-level Executive.
+- Challenges: Labor shortages, Cost reduction, Legacy system modernization.
+- Interests: Global Industry Trends, Efficiency Methods, Case Studies, Latest Tech (Automation/Robotics).
 
-【評価基準】（合計100点）
+【Scoring Criteria】 (Total 100 points)
 
-1. **物流業界への関連性と影響** (0-35点)
-   - 物流、サプライチェーン、倉庫管理に関連する内容か？
-   - 業界に影響を与える、または参考になる情報か？
-   - 物流業界特有の文脈や課題に触れているか？
+1. **Relevance to Global Logistics & Strategy** (0-40 points)
+   - Is it highly relevant to logistics, SCM, or warehouse operations?
+   - Does it address accurate global market trends or supply chain challenges?
+   - Is it critical information for a C-level executive or Manager?
 
-2. **DX・テクノロジー・効率化** (0-25点)
-   - 最新技術（AI, IoT, ロボット, 自動倉庫など）の活用が含まれるか？
-   - 効率化や改善の可能性がある取り組みか？
-   - 海外の先進事例など、日本企業が参考にできる視点があるか？
+2. **Innovation & Modernization** (0-20 points)
+   - Does it cover Technology (DX), Automation, OR Process Innovation (Kaizen)?
+   - *Note: Pure strategic moves or regulatory changes are also "Innovation" if they modernize the industry.*
 
-3. **読者への実用性** (0-25点)
-   - 読者が自社の業務に活かせるヒントがあるか？
-   - 意思決定（ツール導入や戦略変更）の参考になる情報か？
-   - 業界トレンドの理解に役立つか？
+3. **Managerial Utility** (0-30 points)
+   - Is this helpful for decision making (strategy, purchasing, hiring)?
+   - Does it provide actionable insights or essential knowledge?
+   - Is it "Must Read" vs "Nice to know"?
 
-4. **情報の新鮮さ・話題性** (0-15点)
-   - 最新の業界動向や注目すべきニュースか？
-   - 大手企業や業界リーダーの動きか？
-   - 市場トレンドや今後の展望に関する情報か？
+4. **Freshness** (0-10 points)
+   - Is it timely news?
+   - Does it feature major players or significant shifts?
 
-【記事情報】
-タイトル: {title}
-要約: {summary}
-ソース: {source}
+【Article Info】
+Title: {title}
+Summary: {summary}
+Source: {source}
 
-【出力形式】
-以下のJSON形式で出力してください:
+【Output Format】
+Output ONLY the following JSON format:
 {{
-  "score": <0-100の整数>,
-  "reasoning": "<評価理由をターゲット読者の視点で2-3文で簡潔に>",
+  "score": <Integer 0-100>,
+  "reasoning": "<Concise reasoning in English from the Editor's perspective (2-3 sentences)>",
   "relevance": "<high/medium/low>"
 }}
 """

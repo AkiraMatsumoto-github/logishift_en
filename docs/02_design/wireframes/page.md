@@ -1,40 +1,40 @@
-# ワイヤーフレーム: 固定ページ
+# Wireframe: Static Page
 
-## 概要
-- **ファイル名**: `page.php`
-- **役割**: 運営者情報、お問い合わせ、プライバシーポリシーなどの静的コンテンツを表示する。
-- **対象ページ**:
-    - 運営者情報 (`/about/`)
-    - お問い合わせ (`/contact/`)
-    - プライバシーポリシー (`/privacy-policy/`)
-    - サイトマップ (`/sitemap/`)
-- **デザイン方針**: Mobile-First, Flat Design (No Shadows/Gradients).
+## Overview
+- **File**: `page.php`
+- **Role**: Display static content such as About Us, Contact, and Privacy Policy.
+- **Target Pages**:
+    - About Us (`/about/`)
+    - Contact (`/contact/`)
+    - Privacy Policy (`/privacy-policy/`)
+    - Sitemap (`/sitemap/`)
+- **Design Policy**: Mobile-First, Flat Design (No Shadows/Gradients).
 
-## レイアウト (Desktop / Mobile)
+## Layout (Desktop / Mobile)
 
 ### Desktop (> 768px)
 ```text
 +-----------------------------------------------------------------------+
 | [Header]                                                              |
 +-----------------------------------------------------------------------+
-| [Breadcrumb] Home > 運営者情報                                        |
+| [Breadcrumb] Home > About Us                                          |
 +-----------------------------------------------------------------------+
 | [Main Content] (Center / Max-width: 800px)                            |
 |                                                                       |
-|  <h1>運営者情報</h1> (Flat Style)                                     |
+|  <h1>About Us</h1> (Flat Style)                                       |
 |                                                                       |
 |  [Lead Text]                                                          |
-|  LogiShiftの運営体制についてご案内します。                            |
+|  Introduction to LogiShift Global operation structure.                |
 |                                                                       |
-|  <h2>基本情報</h2>                                                    |
+|  <h2>Operation Information</h2>                                       |
 |  +-------------------------------------------------------+            |
-|  | サイト名       | LogiShift (ロジシフト)               |            |
+|  | Site Name      | LogiShift Global                     |            |
 |  +-------------------------------------------------------+            |
-|  | 運営者         | LogiShift編集部                      |            |
+|  | Operator       | LogiShift Editorial Team             |            |
 |  +-------------------------------------------------------+            |
 |  (Border: 1px solid Gray, No Shadow)                                  |
 |                                                                       |
-|  (お問い合わせフォームの場合)                                         |
+|  (For Contact Form)                                                   |
 |  [ Name Input (Flat) ]                                                |
 |  [ Email Input (Flat) ]                                               |
 |  [ Message Textarea (Flat) ]                                          |
@@ -46,7 +46,7 @@
 ```
 
 ### Mobile (< 768px)
-- **特徴**: 横幅100% (Padding 16px)、テーブルは縦積み、フォームは縦並び。
+- **Features**: 100% Width (Padding 16px), stacked tables, vertically stacked forms.
 ```text
 +---------------------------------------+
 | [Header] Hamburger Menu               |
@@ -55,14 +55,14 @@
 +---------------------------------------+
 | [Main Content]                        |
 |                                       |
-|  <h1>運営者情報 (24px)</h1>           |
+|  <h1>About Us (24px)</h1>             |
 |                                       |
-|  <h2>基本情報</h2>                    |
+|  <h2>Operation Information</h2>       |
 |  (Table may stack or scroll)          |
-|  [ サイト名 ]                         |
-|  [ LogiShift ]                        |
-|  [ 運営者 ]                           |
-|  [ LogiShift編集部 ]                  |
+|  [ Site Name ]                        |
+|  [ LogiShift Global ]                 |
+|  [ Operator ]                         |
+|  [ LogiShift Editorial Team ]         |
 |                                       |
 |  (Form)                               |
 |  [ Name Input ]                       |

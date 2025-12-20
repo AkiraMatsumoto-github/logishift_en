@@ -1,90 +1,89 @@
-# LogiShift テーマ詳細設計書
+# LogiShift Theme Design Specification
 
-## 1. デザインコンセプト
-- **キーワード**: 信頼、先進性、ビジネス、物流、明快 (Clear)、直感 (Direct)
-- **デザイン方針**: Mobile-First, Flat Design, No Shadows/Gradients.
-- **カラーパレット**:
-    - メイン: ディープネイビー (`#0A192F`) - 信頼、堅実
-    - アクセント: テックブルー (`#00B4D8`) - 先進性、DX
-    - ベース: ホワイト/ライトグレー (`#F8F9FA`) - 清潔感
-    - テキスト: ダークグレー (`#333333`) - 可読性
-- **フォント**:
-    - 日本語: Noto Sans JP (Google Fonts)
-    - 英語: Inter (Google Fonts)
+## 1. Design Concept
+- **Keywords**: Reliable, Progressive, Business, Logistics, Clear, Direct
+- **Design Policy**: Mobile-First, **Flat Design** (No Shadows, No Gradients), **Pill-shaped Elements**.
+- **Color Palette**:
+    - **Main**: Deep Navy (`#0A192F`) - Reliability, Stability
+    - **Accent**: Tech Blue (`#00B4D8`) - Innovation, DX
+    - **Base**: White / Light Gray (`#F8F9FA`) - Cleanliness
+    - **Text**: Dark Gray (`#333333`) - Readability
+- **Fonts**:
+    - **Global/En**: Inter (Google Fonts) - Headings & UI
+    - **Body**: System Sans-serif (or Noto Sans for Japan context)
 
-## 2. ページテンプレート構成 (Template Hierarchy)
+## 2. Page Template Hierarchy
 
-| テンプレートファイル | 用途 | 役割・機能 |
+| Template File | Usage | Role & Function |
 | :--- | :--- | :--- |
-| `front-page.php` | トップページ | サイトの顔。新着記事、人気記事、カテゴリ別セクション、CTAを配置。 |
-| `home.php` | 記事一覧 | ブログロール（新着順の記事一覧）。 |
-| `single.php` | 記事詳細 | 個別の記事ページ。目次、本文、関連記事、シェアボタン、著者情報。 |
-| `page.php` | 固定ページ | 「運営者情報」「お問い合わせ」などの静的ページ。 |
-| `archive.php` | カテゴリ/タグ一覧 | 特定のカテゴリやタグに属する記事の一覧。 |
-| `search.php` | 検索結果 | サイト内検索の結果表示。 |
-| `404.php` | 404ページ | ページが見つからない場合の表示。サイトマップへの誘導。 |
+| `front-page.php` | Front Page | The face of the site. Features Hero Section, Latest Articles, Category Sections, and CTAs. |
+| `index.php` | Blog Roll / Default | Standard list of articles (Fall back for `home.php` if not present). |
+| `single.php` | Single Post | Individual article page. Contains Table of Contents, Content, Related Posts, Share Buttons, Author Info. |
+| `page.php` | Static Page | Static content like "About Us", "Contact", "Privacy Policy". |
+| `archive.php` | Category/Tag Archive | List of articles belonging to a specific category or tag. |
+| `search.php` | Search Results | Displays search results. |
+| `404.php` | 404 Page | Error page when content is not found. Guides users back to the sitemap or home. |
 
-## 3. コンポーネント設計 (パーツ)
+## 3. Component Design
 
-### 共通パーツ
-- **ヘッダー (`header.php`)**:
-    - ロゴ (左)
-    - グローバルナビゲーション (右): 「物流コスト削減」「DX」「業界トレンド」「用語集」
-    - ハンバーガーメニュー (SP時)
-- **フッター (`footer.php`)**:
-    - サイトマップリンク
-    - 運営者情報リンク
-    - プライバシーポリシー
+### Common Components
+- **Header (`header.php`)**:
+    - Logo (Left)
+    - Global Navigation (Right): "Cost Reduction", "Logistics DX", "Trends", "Glossary"
+    - Hamburger Menu (Mobile)
+- **Footer (`footer.php`)**:
+    - Sitemap Links
+    - About / Legal Links
     - Copyright
+- **Sidebar (`sidebar.php`)**:
+    - Widget area for posts (displayed on Desktop, bottom or hidden on Mobile).
 
-### ページ固有パーツ
-- **ヒーローセクション (トップページ)**:
-    - キャッチコピー: 「物流でビジネスを良い方向へシフトさせる」
-    - 背景: 物流センターやネットワークをイメージした抽象的なグラフィック
-- **記事カード (一覧用)**:
-    - アイキャッチ画像
-    - カテゴリラベル
-    - タイトル
-    - 抜粋
-    - 公開日
-    - スタイル: フラットデザイン (Border only, No Shadow), モバイル時はStack Layout
-- **CTAボックス (記事下/サイドバー)**:
-    - メルマガ登録や資料請求への誘導バナー。
+### Page-Specific Components
+- **Hero Section (Front Page)**:
+    - **Copy**: "Shifting Business through Logistics"
+    - **Background**: Abstract graphics representing logistics networks.
+    - **Style**: Slider or Static Hero with distinct CTA.
+- **Article Card (Archives/Lists)**:
+    - Thumbnail (16:9)
+    - Category Label (Pill-shaped)
+    - Title (H3)
+    - Excerpt & Date
+    - **Style**: **Flat Design** (Border only, No Shadow), Stack Layout on Mobile.
+- **CTA Box**:
+    - Banners for newsletter signup or whitepaper downloads (End of article or Sidebar).
 
-## 4. CMS設計 (WordPress設定)
+## 4. CMS Design (WordPress)
 
-### 投稿タイプ (Post Types)
-今回は標準の「投稿 (Post)」と「固定ページ (Page)」を基本としますが、将来的な拡張性を考慮します。
+### Post Types
+Currently using standard `Post` and `Page`.
 
-- **投稿 (post)**: 通常の記事コンテンツ（ニュース、ノウハウ、事例解説）。
-- **固定ページ (page)**: 会社概要、お問い合わせ、プライバシーポリシーなど。
+- **Post**: Regular articles (News, Know-how, Case Studies).
+- **Page**: Static pages (Company Info, Contact).
 
-### タクソノミー (Taxonomies)
-- **カテゴリー (category)**: 階層構造を持つ分類。
-    - `物流基礎` (slug: `basics`)
-    - `コスト削減` (slug: `cost-reduction`)
-    - `物流DX` (slug: `dx`)
-    - `業界トレンド` (slug: `trends`)
-- **タグ (post_tag)**: フラットなキーワード。
-    - `2024年問題`, `WMS`, `RFID`, `ラストワンマイル`, `トラックドライバー`
+### Taxonomies
+- **Category**: Hierarchical.
+    - `Basics`
+    - `Cost Reduction`
+    - `Logistics DX`
+    - `Industry Trends`
+- **Tag**: Flat keywords.
+    - `2024 Problem`, `WMS`, `RFID`, `Last Mile`, `Driver Shortage`
 
-### カスタムフィールド (Custom Fields)
-プラグイン (Advanced Custom Fields 等) は初期段階では導入せず、必要に応じて検討します。
-まずは標準機能で対応します。
+### Custom Fields
+Not using plugins (ACF) initially. Standard custom fields or manual theme support if needed.
 
-- **SEO設定**: タイトルタグ、メタディスクリプションは、テーマ側で制御するか、将来的にSEOプラグイン (`The SEO Framework` 等) を導入する前提で設計します（今回はテーマの `functions.php` で最低限のメタタグを出力する機能を実装予定）。
+### Menu Locations
+- `primary`: Header Main Navigation
+- `footer`: Footer Links
 
-### メニュー位置 (Menu Locations)
-- `primary`: ヘッダーメインナビゲーション
-- `footer`: フッターリンク
+### Widget Areas
+- `sidebar-1`: Sidebar for Single Post pages (PC only usually).
 
-### ウィジェットエリア (Widget Areas)
-- `sidebar-1`: 記事詳細ページのサイドバー（PC表示時のみ。モバイルでは非表示または下部へ移動）
+## 5. Implementation Roadmap
+(Retrospective / Maintenance)
 
-## 5. 開発ロードマップ (実装順序)
-
-1.  **ベース構築**: `functions.php` (セットアップ), `style.css` (変数定義), `header.php`, `footer.php`
-2.  **トップページ**: `front-page.php` (ヒーローセクション, 新着一覧)
-3.  **記事詳細**: `single.php` (本文スタイル, 目次, 関連記事)
-4.  **アーカイブ**: `archive.php` (カテゴリ一覧表示)
-5.  **固定ページ**: `page.php` (シンプルなお知らせ等)
+1.  **Base Setup**: `functions.php`, `style.css` (Variables), `header.php`, `footer.php`
+2.  **Front Page**: `front-page.php` (Hero, Lists)
+3.  **Single Post**: `single.php` (Styles, TOC, Related)
+4.  **Archives**: `archive.php` (Category grids)
+5.  **Static Pages**: `page.php`

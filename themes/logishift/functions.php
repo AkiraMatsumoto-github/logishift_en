@@ -96,26 +96,26 @@ function logishift_create_dummy_menu() {
         ) );
 
         wp_update_nav_menu_item( $menu_id, 0, array(
-            'menu-item-title' =>  __( 'About', 'logishift' ),
-            'menu-item-url' => home_url( '/about/' ),
+            'menu-item-title' =>  __( 'Global Trends', 'logishift' ),
+            'menu-item-url' => home_url( '/category/global-trends/' ),
             'menu-item-status' => 'publish'
         ) );
 
         wp_update_nav_menu_item( $menu_id, 0, array(
-            'menu-item-title' =>  __( 'Logistics Strategy', 'logishift' ),
-            'menu-item-url' => home_url( '/category/strategy/' ),
+            'menu-item-title' =>  __( 'Tech & DX', 'logishift' ),
+            'menu-item-url' => home_url( '/category/technology-dx/' ),
             'menu-item-status' => 'publish'
         ) );
 
         wp_update_nav_menu_item( $menu_id, 0, array(
-            'menu-item-title' =>  __( 'DX Solutions', 'logishift' ),
-            'menu-item-url' => home_url( '/category/dx/' ),
+            'menu-item-title' =>  __( 'Cost', 'logishift' ),
+            'menu-item-url' => home_url( '/category/cost-efficiency/' ),
             'menu-item-status' => 'publish'
         ) );
 
         wp_update_nav_menu_item( $menu_id, 0, array(
-            'menu-item-title' =>  __( 'Cost Reduction', 'logishift' ),
-            'menu-item-url' => home_url( '/category/cost/' ),
+            'menu-item-title' =>  __( 'SCM', 'logishift' ),
+            'menu-item-url' => home_url( '/category/scm/' ),
             'menu-item-status' => 'publish'
         ) );
 
@@ -198,7 +198,7 @@ function logishift_seo_meta() {
     <meta property="og:type" content="<?php echo esc_attr( $type ); ?>">
     <meta property="og:site_name" content="<?php echo esc_attr( $site_name ); ?>">
     <meta property="og:image" content="<?php echo esc_url( $image ); ?>">
-    <meta property="og:locale" content="ja_JP">
+    <meta property="og:locale" content="en_US">
     
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">

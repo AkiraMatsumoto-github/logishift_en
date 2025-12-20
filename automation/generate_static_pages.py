@@ -15,17 +15,17 @@ from wp_client import WordPressClient
 # Page configurations
 PAGE_CONFIGS = {
     "privacy": {
-        "title": "プライバシーポリシー",
+        "title": "Privacy Policy",
         "slug": "privacy-policy",
         "type": "privacy"
     },
     "about": {
-        "title": "運営者情報",
+        "title": "About Us",
         "slug": "about",
         "type": "about"
     },
     "contact": {
-        "title": "お問い合わせ",
+        "title": "Contact Us",
         "slug": "contact",
         "type": "contact"
     }
@@ -38,6 +38,7 @@ def generate_page(gemini_client, page_type):
     Args:
         gemini_client: GeminiClient instance
         page_type: Type of page (privacy, about, contact)
+        language: Language code ("en" or "ja")
     
     Returns:
         Tuple of (title, markdown_content)

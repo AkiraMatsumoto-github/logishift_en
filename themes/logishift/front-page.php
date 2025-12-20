@@ -77,7 +77,7 @@ get_header();
 	<section id="latest-articles" class="featured-articles-section">
 		<div class="container">
 			<div class="section-header">
-				<h2 class="section-title"><?php esc_html_e( '最新記事', 'logishift' ); ?></h2>
+				<h2 class="section-title"><?php esc_html_e( 'Latest Articles', 'logishift' ); ?></h2>
 			</div>
 
 			<div class="featured-grid">
@@ -128,7 +128,7 @@ get_header();
 	<section id="popular-articles" class="popular-articles-section" style="background-color: var(--color-light-gray);">
 		<div class="container">
 			<div class="section-header">
-				<h2 class="section-title"><?php esc_html_e( '人気記事', 'logishift' ); ?></h2>
+				<h2 class="section-title"><?php esc_html_e( 'Popular Articles', 'logishift' ); ?></h2>
 			</div>
 
 			<div class="featured-grid">
@@ -170,7 +170,7 @@ get_header();
 						endforeach;
 						wp_reset_postdata();
 					} else {
-						echo '<p>' . esc_html__( '集計中...', 'logishift' ) . '</p>';
+						echo '<p>' . esc_html__( 'Calculating popularity...', 'logishift' ) . '</p>';
 					}
 				}
 				?>
@@ -179,37 +179,32 @@ get_header();
 	</section>
 
 	<?php
-	// Category sections based on content_strategy.md
+	// Category sections based on content_strategy.md and global sitemap
 	$category_sections = array(
 		array(
-			'slug'        => 'logistics-dx',
-			'name'        => '物流DX・トレンド',
-			'description' => '物流業界の最新動向、2024年問題、DX推進の実践的ノウハウ',
+			'slug'        => 'global-trends',
+			'name'        => 'Global Trends',
+			'description' => 'Latest logistics trends from around the world.',
 		),
 		array(
-			'slug'        => 'warehouse-management',
-			'name'        => '倉庫管理・WMS',
-			'description' => 'WMS導入、在庫管理、ピッキング効率化の成功事例',
+			'slug'        => 'technology-dx',
+			'name'        => 'Technology & DX',
+			'description' => 'Digital Transformation and Tech innovations in logistics.',
 		),
 		array(
-			'slug'        => 'transportation',
-			'name'        => '輸配送・TMS',
-			'description' => '配車計画、ラストワンマイル、動態管理の最適化手法',
+			'slug'        => 'cost-efficiency',
+			'name'        => 'Cost & Efficiency',
+			'description' => 'Strategies for cost reduction and operational efficiency.',
 		),
 		array(
-			'slug'        => 'material-handling',
-			'name'        => 'マテハン・ロボット',
-			'description' => '自動倉庫、AGV/AMR、RFID導入の最新トレンド',
-		),
-		array(
-			'slug'        => 'supply-chain',
-			'name'        => 'サプライチェーン',
-			'description' => 'SCM戦略、調達最適化、国際物流のベストプラクティス',
+			'slug'        => 'scm',
+			'name'        => 'Supply Chain Management',
+			'description' => 'Optimizing global supply chains and procurement.',
 		),
 		array(
 			'slug'        => 'case-studies',
-			'name'        => '事例',
-			'description' => '企業の成功事例、現場インタビュー、導入効果の実績',
+			'name'        => 'Case Studies',
+			'description' => 'Real-world examples and success stories.',
 		),
 	);
 
@@ -263,14 +258,14 @@ get_header();
 						wp_reset_postdata();
 					else :
 						?>
-						<p class="no-posts"><?php esc_html_e( '記事がまだありません。', 'logishift' ); ?></p>
+						<p class="no-posts"><?php esc_html_e( 'No posts found.', 'logishift' ); ?></p>
 					<?php endif; ?>
 				</div>
 
 				<!-- Moved Button to Bottom -->
 				<div style="text-align: right; margin-top: 24px;">
 					<a href="<?php echo esc_url( get_category_link( $cat_obj ) ); ?>" class="text-link-arrow">
-						<?php esc_html_e( '一覧へ', 'logishift' ); ?> →
+						<?php esc_html_e( 'View More', 'logishift' ); ?> →
 					</a>
 				</div>
 			</div>
@@ -284,8 +279,8 @@ get_header();
 		<div class="container">
 			<div class="section-header">
 				<div class="section-header-content">
-					<h2 class="section-title"><?php esc_html_e( '海外トレンド', 'logishift' ); ?></h2>
-					<p class="section-description"><?php esc_html_e( '米国・欧州・アジアの最新物流DX事例と日本への示唆', 'logishift' ); ?></p>
+					<h2 class="section-title"><?php esc_html_e( 'Global Trends', 'logishift' ); ?></h2>
+					<p class="section-description"><?php esc_html_e( 'Latest logistics DX cases and insights from around the world.', 'logishift' ); ?></p>
 				</div>
 			</div>
 
@@ -295,15 +290,14 @@ get_header();
 				$global_cat = get_category_by_slug( 'news-global' );
 				$global_url = $global_cat ? get_category_link( $global_cat ) : '#';
 				?>
-				<button class="region-tab active" data-region="all" data-url="<?php echo esc_url( $global_url ); ?>"><?php esc_html_e( 'すべて', 'logishift' ); ?></button>
+				<button class="region-tab active" data-region="all" data-url="<?php echo esc_url( $global_url ); ?>"><?php esc_html_e( 'All', 'logishift' ); ?></button>
 				
 				<?php
 				$regions = array(
-					'usa'            => array( 'label' => 'アメリカ' ),
-					'europe'         => array( 'label' => 'ヨーロッパ' ),
-					'china'          => array( 'label' => '中国' ),
-					'southeast-asia' => array( 'label' => '東南アジア' ),
-					'japan' => array( 'label' => '日本' ),
+					'japan'          => array( 'label' => 'Japan' ),
+					'usa'            => array( 'label' => 'North America' ),
+					'europe'         => array( 'label' => 'Europe' ),
+					'asia-pacific'   => array( 'label' => 'Asia-Pacific' ),
 				);
 
 				foreach ( $regions as $slug => $info ) :
@@ -338,7 +332,7 @@ get_header();
 							
 							if ( $post_tags ) {
 								foreach ( $post_tags as $tag ) {
-									if ( in_array( $tag->slug, array( 'usa', 'europe', 'china', 'southeast-asia', 'japan', 'global' ) ) ) {
+									if ( in_array( $tag->slug, array( 'usa', 'europe', 'asia-pacific', 'japan', 'global' ) ) ) {
 										$region_tags[] = $tag->slug;
 									}
 								}
@@ -373,140 +367,49 @@ get_header();
 					<!-- Show More Button -->
 					<div class="global-show-more-container" style="text-align: right; margin-top: 24px;">
 						<a href="<?php echo esc_url( $global_url ); ?>" class="text-link-arrow global-show-more-link">
-							<?php esc_html_e( 'もっと見る', 'logishift' ); ?> →
+							<?php esc_html_e( 'View More', 'logishift' ); ?> →
 						</a>
 					</div>
 
 				<?php else : ?>
-					<p class="no-posts"><?php esc_html_e( '記事がまだありません。', 'logishift' ); ?></p>
+					<p class="no-posts"><?php esc_html_e( 'No posts found.', 'logishift' ); ?></p>
 				<?php endif; ?>
 			</div>
 		</div>
 	</section>
 
-	<!-- Industry-based Tag Sections -->
-	<section class="industry-tags-section" style="background-color: var(--color-light-gray); padding: var(--spacing-section) 0;">
-		<div class="container">
-			<div class="section-header">
-				<h2 class="section-title"><?php esc_html_e( '業界別で探す', 'logishift' ); ?></h2>
-			</div>
-
-			<?php
-			$industry_tags = array(
-				array( 'slug' => 'manufacturing', 'name' => '製造業' ),
-				array( 'slug' => 'retail', 'name' => '小売・流通' ),
-				array( 'slug' => 'ecommerce', 'name' => 'EC・通販' ),
-				array( 'slug' => '3pl-warehouse', 'name' => '3PL・倉庫' ),
-				array( 'slug' => 'food-beverage', 'name' => '食品・飲料' ),
-				array( 'slug' => 'apparel', 'name' => 'アパレル' ),
-				array( 'slug' => 'medical', 'name' => '医薬品・医療' ),
-			);
-			?>
-
-			<!-- Industry Tabs -->
-			<div class="region-filter-tabs industry-tabs">
-				<?php foreach ( $industry_tags as $index => $industry_tag ) : 
-					$active_class = $index === 0 ? 'active' : '';
-				?>
-					<button class="region-tab <?php echo $active_class; ?>" data-industry="<?php echo esc_attr( $industry_tag['slug'] ); ?>">
-						<?php echo esc_html( $industry_tag['name'] ); ?>
-					</button>
-				<?php endforeach; ?>
-			</div>
-
-			<!-- Industry Content Blocks -->
-			<div class="industry-content-container">
-				<?php foreach ( $industry_tags as $index => $industry_tag ) : 
-					$display_style = $index === 0 ? 'block' : 'none';
-				?>
-					<div class="industry-tag-block" id="industry-block-<?php echo esc_attr( $industry_tag['slug'] ); ?>" style="display: <?php echo $display_style; ?>;">
-						<div class="article-grid">
-							<?php
-							$ind_args = array(
-								'tag'            => $industry_tag['slug'],
-								'posts_per_page' => 3,
-								'orderby'        => 'date',
-								'order'          => 'DESC',
-							);
-							$ind_query = new WP_Query( $ind_args );
-
-							if ( $ind_query->have_posts() ) :
-								while ( $ind_query->have_posts() ) :
-									$ind_query->the_post();
-									?>
-									<article id="post-<?php the_ID(); ?>" <?php post_class( 'article-card' ); ?>>
-										<div class="article-thumbnail">
-											<?php if ( has_post_thumbnail() ) : ?>
-												<a href="<?php the_permalink(); ?>"><?php the_post_thumbnail( 'medium' ); ?></a>
-											<?php else : ?>
-												<a href="<?php the_permalink(); ?>"><div class="no-image"></div></a>
-											<?php endif; ?>
-										</div>
-										<div class="article-content">
-											<div class="article-meta">
-												<span class="posted-on"><?php echo get_the_date(); ?></span>
-											</div>
-											<h3 class="article-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-										</div>
-									</article>
-									<?php
-								endwhile;
-								wp_reset_postdata();
-							else:
-								?>
-								<p class="no-posts"><?php esc_html_e( '記事がまだありません。', 'logishift' ); ?></p>
-								<?php
-							endif;
-							?>
-						</div>
-						<div style="text-align: right; margin-top: 24px;">
-							<a href="<?php echo esc_url( get_tag_link( get_term_by( 'slug', $industry_tag['slug'], 'post_tag' ) ) ); ?>" class="text-link-arrow">
-								<?php echo esc_html( $industry_tag['name'] ); ?> <?php esc_html_e( 'の記事一覧', 'logishift' ); ?> →
-							</a>
-						</div>
-					</div>
-				<?php endforeach; ?>
-			</div>
-		</div>
-	</section>
-
-	<!-- Theme-based Tag Sections -->
+	<!-- Theme-based Tag Sections (Topics) -->
 	<section class="theme-tags-section">
 		<div class="container">
 			<div class="section-header">
-				<h2 class="section-title"><?php esc_html_e( '課題別で探す', 'logishift' ); ?></h2>
+				<h2 class="section-title"><?php esc_html_e( 'Search by Topic', 'logishift' ); ?></h2>
 			</div>
 
 			<?php
 			$theme_tags = array(
 				array(
-					'slug' => 'cost-reduction',
-					'name' => 'コスト削減',
-					'icon' => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="theme-icon-svg"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>',
+					'slug' => 'sustainability',
+					'name' => 'Sustainability',
+					'icon' => '',
 				),
 				array(
 					'slug' => 'labor-shortage',
-					'name' => '人手不足対策',
-					'icon' => '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="theme-icon-svg"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>',
-				),
-				array(
-					'slug' => 'quality-improvement',
-					'name' => '品質向上',
+					'name' => 'Labor Shortage',
 					'icon' => '',
 				),
 				array(
-					'slug' => 'environment-sdgs',
-					'name' => '環境・SDGs',
+					'slug' => 'last-mile',
+					'name' => 'Last Mile',
 					'icon' => '',
 				),
 				array(
-					'slug' => 'safety-bcp',
-					'name' => '安全・BCP',
+					'slug' => 'automation',
+					'name' => 'Warehouse Automation',
 					'icon' => '',
 				),
 				array(
-					'slug' => 'subsidy',
-					'name' => '補助金・助成金',
+					'slug' => 'kaizen',
+					'name' => 'Kaizen',
 					'icon' => '',
 				),
 			);
@@ -534,7 +437,7 @@ get_header();
 							<?php
 							$tag_args = array(
 								'tag'            => $theme_tag['slug'],
-								'posts_per_page' => 3, // Changed to 3 to match other grids
+								'posts_per_page' => 3, 
 								'orderby'        => 'date',
 								'order'          => 'DESC',
 							);
@@ -567,7 +470,7 @@ get_header();
 						</div>
 						<div style="text-align: right; margin-top: 24px;">
 							<a href="<?php echo esc_url( get_tag_link( get_term_by( 'slug', $theme_tag['slug'], 'post_tag' ) ) ); ?>" class="text-link-arrow">
-								<?php echo esc_html( $theme_tag['name'] ); ?> <?php esc_html_e( 'の記事一覧', 'logishift' ); ?> →
+								<?php esc_html_e( 'View More', 'logishift' ); ?> →
 							</a>
 						</div>
 					</div>
@@ -580,7 +483,7 @@ get_header();
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-	// 1. Global Trends Filter (Existing Logic)
+	// 1. Global Trends Filter
 	const regionTabs = document.querySelectorAll('.global-trends-section .region-tab');
 	const globalArticles = document.querySelectorAll('.global-article');
 	const showMoreLink = document.querySelector('.global-show-more-link');
@@ -632,7 +535,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		filterArticles(selectedRegion);
 	});
 
-	// 2. Theme Tabs Logic (New)
+	// 2. Theme Tabs Logic
 	const themeTabs = document.querySelectorAll('.theme-tabs .region-tab');
 	const themeBlocks = document.querySelectorAll('.theme-tag-block');
 
@@ -647,28 +550,6 @@ document.addEventListener('DOMContentLoaded', function() {
 			// Switch Content
 			themeBlocks.forEach(block => {
 				if (block.id === 'theme-block-' + selectedTheme) {
-					block.style.display = 'block';
-				} else {
-					block.style.display = 'none';
-				}
-			});
-		});
-	});
-	// 3. Industry Tabs Logic (New)
-	const industryTabs = document.querySelectorAll('.industry-tabs .region-tab');
-	const industryBlocks = document.querySelectorAll('.industry-tag-block');
-
-	industryTabs.forEach(tab => {
-		tab.addEventListener('click', function() {
-			const selectedIndustry = this.getAttribute('data-industry');
-
-			// Switch Tabs
-			industryTabs.forEach(t => t.classList.remove('active'));
-			this.classList.add('active');
-
-			// Switch Content
-			industryBlocks.forEach(block => {
-				if (block.id === 'industry-block-' + selectedIndustry) {
 					block.style.display = 'block';
 				} else {
 					block.style.display = 'none';

@@ -63,15 +63,15 @@ get_header();
 					<?php
 					the_posts_pagination(
 						array(
-							'prev_text' => '← 前へ',
-							'next_text' => '次へ →',
+							'prev_text' => '← Previous',
+							'next_text' => 'Next →',
 						)
 					);
 					?>
 				</div>
 
 			<?php else : ?>
-				<p class="no-posts"><?php esc_html_e( '記事が見つかりませんでした。', 'logishift' ); ?></p>
+				<p class="no-posts"><?php esc_html_e( 'No posts found.', 'logishift' ); ?></p>
 			<?php endif; ?>
 		</div>
 	</section>
@@ -80,7 +80,7 @@ get_header();
 	<section class="popular-articles-section" style="background-color: var(--color-light-gray); margin-top: 40px; padding-top: 40px; border-top: 1px solid var(--color-border-gray);">
 		<div class="container">
 			<div class="section-header">
-				<h2 class="section-title"><?php esc_html_e( 'このカテゴリの人気記事', 'logishift' ); ?></h2>
+				<h2 class="section-title"><?php esc_html_e( 'Popular in this Category', 'logishift' ); ?></h2>
 			</div>
 
 			<div class="featured-grid">
@@ -128,7 +128,7 @@ get_header();
 						endforeach;
 						wp_reset_postdata();
 					} else {
-						echo '<p>' . esc_html__( '集計中...', 'logishift' ) . '</p>';
+						echo '<p>' . esc_html__( 'Calculating...', 'logishift' ) . '</p>';
 					}
 				}
 				?>

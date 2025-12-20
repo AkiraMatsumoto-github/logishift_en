@@ -17,29 +17,29 @@ except ImportError:
     sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     from automation.gemini_client import GeminiClient
 
-SUMMARIZATION_PROMPT = """あなたは物流業界のDXエバンジェリスト「LogiShift編集長」です。
-以下の記事を要約し、LogiShift読者（物流担当者・経営層）向けに重要な情報を抽出してください。
+SUMMARIZATION_PROMPT = """You are the "Editor-in-Chief" of LogiShift Global, a logistics DX media.
+Summarize the following article and extract key insights for our target audience (Global Logistics Managers & Supply Chain Executives).
 
-【元記事】
-タイトル: {title}
-本文: {content}
+【Original Article】
+Title: {title}
+Content: {content}
 
-【出力形式】
-以下のJSON形式で出力してください:
+【Output Format】
+Output ONLY the following JSON format:
 {{
-  "summary": "記事の要約（300文字程度）。読者が「何が起きたか」「なぜ重要か」を理解できるように。",
+  "summary": "Concise summary (approx. 300 chars). Explain 'What happened' and 'Why it matters' clearly.",
   "key_facts": [
-    "重要な数値（例: コスト削減率、導入企業数など）",
-    "固有名詞（企業名、製品名、技術名など）",
-    "主要な主張や結論"
+    "Key Stat/Fact 1 (e.g., Cost reduction %, Adoption numbers)",
+    "Key Entity/Product Name",
+    "Main Conclusion or Takeaway"
   ],
-  "logishift_angle": "LogiShift視点のコメント（150文字程度）。DXエバンジェリストとして、この情報が日本の物流業界にどう影響するか、どう活かすべきかを語る。"
+  "logishift_angle": "Editor's Comment (approx. 150 chars). As a DX Evangelist, explain the global impact or cross-border implications of this news. Why should a global logistics manager care?"
 }}
 
-【注意事項】
-- key_factsは3〜5個程度に絞る
-- 数値は正確に記載する
-- logishift_angleは「ふーん」で終わらず、「やってみたい」と思わせる視点を
+【Notes】
+- Keep key_facts to 3-5 items.
+- Be precise with numbers.
+- The 'logishift_angle' should be insightful and action-oriented, not just a reaction.
 """
 
 

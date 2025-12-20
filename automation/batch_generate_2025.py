@@ -7,9 +7,9 @@ import time
 import sys
 from datetime import datetime
 
-MARKDOWN_FILE = "/Users/matsumotoakira/Documents/Private_development/media/docs/03_automation/seo_target_keywords_2025.md"
-SCRIPT_PATH = "/Users/matsumotoakira/Documents/Private_development/media/automation/generate_article.py"
-PYTHON_EXEC = "/Users/matsumotoakira/Documents/Private_development/media/automation/venv/bin/python"
+MARKDOWN_FILE = "/Users/matsumotoakira/Documents/Private_development/logishift_en/docs/03_automation/seo_target_keywords_2025.md"
+SCRIPT_PATH = "/Users/matsumotoakira/Documents/Private_development/logishift_en/automation/generate_article.py"
+PYTHON_EXEC = "/Users/matsumotoakira/Documents/Private_development/logishift_en/automation/venv/bin/python"
 
 def parse_markdown_table(file_path):
     tasks = []

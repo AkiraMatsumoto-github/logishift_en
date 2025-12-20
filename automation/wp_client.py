@@ -9,12 +9,20 @@ class WordPressClient:
     def __init__(self):
         self.wp_url = os.getenv("WP_URL")
         self.wp_user = os.getenv("WP_USER")
-        self.wp_password = os.getenv("WP_APP_PASSWORD")
+        self.wp_password = os.getenv("WP_APP_PASSWORD").replace(" ", "") if os.getenv("WP_APP_PASSWORD") else None
         
-        if not all([self.wp_url, self.wp_user, self.wp_password]):
-            raise ValueError("Missing WordPress credentials in .env")
+        if not self.wp_url:
+             raise ValueError("Missing WP_URL in .env")
+        
+        if not self.wp_user:
+             print("Warning: WP_USER not set in .env")
 
-        self.auth = (self.wp_user, self.wp_password)
+        if self.wp_user and self.wp_password:
+            self.auth = (self.wp_user, self.wp_password)
+        else:
+            self.auth = None
+            if not self.wp_password:
+                print("Warning: WP_APP_PASSWORD not set. Requests requiring authentication may fail.")
         # Use query param format for default permalink structure
         self.api_url = f"{self.wp_url}/?rest_route=/wp/v2"
 
@@ -140,7 +148,7 @@ class WordPressClient:
             print(f"Error fetching/creating tag {slug}: {e}")
             return None
 
-    def get_posts(self, limit=10, category=None, tag=None, status="publish"):
+    def get_posts(self, limit=10, category=None, tag=None, status="publish", after=None):
         """
         Retrieve recent posts from WordPress.
         
@@ -149,6 +157,7 @@ class WordPressClient:
             category: Filter by category ID (int)
             tag: Filter by tag ID (int)
             status: Filter by post status (default: "publish")
+            after: ISO 8601 date string to filter posts published after this date
             
         Returns:
             List of posts (dict) or None if error
@@ -167,6 +176,8 @@ class WordPressClient:
                 params["categories"] = category
             if tag:
                 params["tags"] = tag
+            if after:
+                params["after"] = after
                 
             response = requests.get(url, params=params, auth=self.auth)
             response.raise_for_status()

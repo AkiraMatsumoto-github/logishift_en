@@ -22,7 +22,7 @@ def parse_article_content(text):
     Extracts the first Markdown heading (# Title) as the title.
     """
     lines = text.split('\n')
-    title = "無題"
+    title = "no title"
     content_start_index = 0
     
     for i, line in enumerate(lines):

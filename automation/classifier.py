@@ -22,47 +22,48 @@ class ArticleClassifier:
         """
         
         prompt = f"""
-        あなたは物流メディア「LogiShift」の編集者です。
-        以下の記事タイトルと概要を分析し、最も適切な「カテゴリ（1つ）」と「タグ（複数可）」を選択してください。
-        
-        ## 記事情報
-        タイトル: {title}
-        概要: {content_summary}
-        
-        ## 1. カテゴリ (必ず1つ選択)
-        - 物流DX・トレンド (logistics-dx)
-        - 倉庫管理・WMS (warehouse-management)
-        - 輸配送・TMS (transportation)
-        - マテハン・ロボット (material-handling)
-        - サプライチェーン (supply-chain)
-        - 事例・インタビュー (case-studies)
-        - ニュース・海外 (news-global)
-        ※ 海外の動向や事例に関する記事は、必ず「ニュース・海外 (news-global)」を選択してください。
-        
-        ## 2. 業種タグ (該当するものがあれば1つのみ選択、なければ空)
-        - 製造業 (manufacturing)
-        - 小売・流通 (retail)
-        - EC・通販 (ecommerce)
-        - 3PL・倉庫 (3pl-warehouse)
-        - 食品・飲料 (food-beverage)
-        - アパレル (apparel)
-        - 医薬品・医療 (medical)
-        
-        ## 3. テーマタグ (該当するものがあれば複数選択可、なければ空)
-        - コスト削減 (cost-reduction)
-        - 人手不足対策 (labor-shortage)
-        - 品質向上・誤出荷防止 (quality-improvement)
-        - 環境・SDGs (environment-sdgs)
-        - 安全・BCP (safety-bcp)
-        - 補助金・助成金 (subsidy)
+        You are an Editor for the logistics media "LogiShift Global".
+        Analyze the following article title and summary, and select the most appropriate "Category (Select 1)" and "Tags (Multiple allowed)".
 
-        ## 4. 地域タグ (海外記事の場合に1つのみ選択、該当なければ空)
-        - アメリカ (usa)
-        - ヨーロッパ (europe)
-        - 中国 (china)
-        - 東南アジア (southeast-asia)
-        
-        ## 出力フォーマット (JSONのみ)
+        ## Article Info
+        Title: {title}
+        Summary: {content_summary}
+
+        ## 1. Category (Select EXACTLY ONE)
+        - Logistics DX & Trends (logistics-dx)
+        - Warehouse Management / WMS (warehouse-management)
+        - Transportation / TMS (transportation)
+        - Material Handling / Robots (material-handling)
+        - Supply Chain (supply-chain)
+        - Case Studies (case-studies)
+        - Global News (news-global)
+        * Note: If the content is about non-domestic trends or case studies, MUST select "Global News (news-global)".
+
+        ## 2. Industry Tags (Select 1 if applicable, else empty)
+        - Manufacturing (manufacturing)
+        - Retail (retail)
+        - eCommerce (ecommerce)
+        - 3PL / Warehousing (3pl-warehouse)
+        - Food & Beverage (food-beverage)
+        - Apparel (apparel)
+        - Medical / Pharma (medical)
+
+        ## 3. Theme Tags (Select multiple if applicable, else empty)
+        - Cost Reduction (cost-reduction)
+        - Labor Shortage (labor-shortage)
+        - Quality Improvement (quality-improvement)
+        - Sustainability / ESG (environment-sdgs)
+        - Safety / BCP (safety-bcp)
+        - Subsidy (subsidy)
+
+        ## 4. Region Tags (Select 1 if it's global news, else empty)
+        - USA / North America (usa)
+        - Europe (europe)
+        - China (china)
+        - Southeast Asia (southeast-asia)
+        - Japan (japan)
+
+        ## Output Format (Strict JSON)
         {{
             "category": "slug",
             "industry_tags": ["slug1", "slug2"],
@@ -109,32 +110,35 @@ class ArticleClassifier:
         """
         
         # 1. Check for Global/News based on source/content first (Low cost)
-        if source in ["techcrunch", "wsj_logistics", "supply_chain_dive", "freightwaves", "36kr_japan", "pandaily"]:
+        # For English Site: 
+        # - Asian/Japanese sources are "Global Trends" (foreign context) -> 'global'
+        # - Western sources are standard -> Let Gemini decide (likely 'news' or 'know/buy/do')
+        if source in ["lnews", "logistics_today", "logi_biz", "36kr_japan", "pandaily", "supply_chain_asia"]:
             return "global"
             
         # 2. Use Gemini for semantic classification (High accuracy)
         prompt = f"""
-        あなたは物流メディアの編集長です。
-        以下の記事企画を、読者にとって最も価値のある5つの記事タイプ（フォーマット）のいずれかに分類してください。
+        You are the Editor-in-Chief of a logistics media.
+        Classify the following article plan into one of the 5 article types (formats) that delivers the most value to the reader.
 
-        記事タイトル: {title}
-        記事概要: {summary}
+        Article Title: {title}
+        Article Summary: {summary}
 
-        ## 選択肢 (以下のいずれか1つを選んでください)
-        1. know  (解説記事: 「WMSとは」「物流DXの仕組み」など、基礎知識や定義を解説)
-        2. buy   (比較記事: 「WMS比較」「おすすめ10選」「選び方」など、製品選定を支援)
-        3. do    (実践/事例: 「導入事例」「成功ノウハウ」「誤出荷ゼロへの道」など、具体的なハウツー)
-        4. news  (国内ニュース: 最新の行政動向、企業のプレスリリース、人事情報など速報値・時事性があるもの)
-        5. global (海外情報: 海外のトレンド、海外企業の事例、日本未上陸の技術)
+        ## Options (Choose ONE)
+        1. know  (Educational: "What is WMS", "Mechanisms of DX", basics and definitions)
+        2. buy   (Comparison/Selection: "Top 10 WMS", "How to choose", comparison guides)
+        3. do    (Practical/Case Study: "Success Stories", "How-to guides", "Road to Zero Errors")
+        4. news  (Domestic News: Latest administrative trends, press releases, personnel changes - time sensitive)
+        5. global (Global News: Overseas trends, global case studies, tech not yet in domestic market)
 
-        ## 判定ルール
-        - 海外の国名や海外企業の話であれば「global」
-        - 「比較」「選定」「おすすめ」なら「buy」
-        - 「事例」「成功」「実践」なら「do」
-        - 「とは」「仕組み」「メリット」などの基礎解説なら「know」
-        - 特定の日付や「速報」などの時事性が強ければ「news」
+        ## Decision Rules
+        - If it mentions overseas countries or foreign companies -> "global"
+        - If "Comparison", "Selection", "Recommended" -> "buy"
+        - If "Case Study", "Success", "Practical" -> "do"
+        - If "What is", "Mechanism", "Benefits" (Fundamentals) -> "know"
+        - If specific dates, "breaking news", or highly time-sensitive -> "news"
         
-        出力はタイプ名（know, buy, do, news, global）のみを小文字で返してください。
+        Output ONLY the type name in lowercase: know, buy, do, news, or global.
         """
 
         try:
