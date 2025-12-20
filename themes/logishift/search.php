@@ -15,7 +15,7 @@ get_header();
 		<div class="breadcrumb">
 			<span><a href="<?php echo esc_url( home_url( '/' ) ); ?>">Home</a></span>
 			<span class="sep">&gt;</span>
-			<span class="current"><?php printf( esc_html__( '「%s」の検索結果', 'logishift' ), '<span>' . get_search_query() . '</span>' ); ?></span>
+			<span class="current"><?php printf( esc_html__( 'Search Results for: %s', 'logishift' ), '<span>' . get_search_query() . '</span>' ); ?></span>
 		</div>
 
 		<div class="content-sidebar-wrap">
@@ -23,7 +23,7 @@ get_header();
 				<header class="page-header">
 					<h1 class="page-title">
 						<?php
-						printf( esc_html__( '検索結果: %s', 'logishift' ), '<span>' . get_search_query() . '</span>' );
+						printf( esc_html__( 'Search Results: %s', 'logishift' ), '<span>' . get_search_query() . '</span>' );
 						?>
 					</h1>
 				</header>
@@ -74,7 +74,7 @@ get_header();
 				<?php else : ?>
 
 					<div class="no-results">
-						<p><?php esc_html_e( 'お探しのキーワードに一致する記事は見つかりませんでした。別のキーワードをお試しください。', 'logishift' ); ?></p>
+						<p><?php esc_html_e( 'No posts found matching your criteria. Please try another search.', 'logishift' ); ?></p>
 						<?php get_search_form(); ?>
 					</div>
 

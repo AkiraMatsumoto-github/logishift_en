@@ -59,13 +59,26 @@
 					<span class="icon-bar"></span>
 				</button>
 				<ul id="primary-menu" class="menu">
-					<li><a href="<?php echo esc_url( home_url( '/?cat=11' ) ); ?>"><?php esc_html_e( '物流DX・トレンド', 'logishift' ); ?></a></li>
-					<li><a href="<?php echo esc_url( home_url( '/?cat=12' ) ); ?>"><?php esc_html_e( '倉庫管理・WMS', 'logishift' ); ?></a></li>
-					<li><a href="<?php echo esc_url( home_url( '/?cat=13' ) ); ?>"><?php esc_html_e( '輸配送・TMS', 'logishift' ); ?></a></li>
-					<li><a href="<?php echo esc_url( home_url( '/?cat=14' ) ); ?>"><?php esc_html_e( 'マテハン・ロボット', 'logishift' ); ?></a></li>
-					<li><a href="<?php echo esc_url( home_url( '/?cat=15' ) ); ?>"><?php esc_html_e( 'サプライチェーン', 'logishift' ); ?></a></li>
-					<li><a href="<?php echo esc_url( home_url( '/?cat=17' ) ); ?>"><?php esc_html_e( '海外トレンド', 'logishift' ); ?></a></li>
-					<li><a href="<?php echo esc_url( home_url( '/?cat=16' ) ); ?>"><?php esc_html_e( '事例', 'logishift' ); ?></a></li>
+					<?php
+					if ( has_nav_menu( 'menu-1' ) ) {
+						wp_nav_menu(
+							array(
+								'theme_location' => 'menu-1',
+								'menu_id'        => 'primary-menu',
+								'container'      => false,
+								'items_wrap'     => '%3$s',
+							)
+						);
+					} else {
+						?>
+						<li><a href="<?php echo esc_url( home_url( '/category/global-trends/' ) ); ?>"><?php esc_html_e( 'Global Trends', 'logishift' ); ?></a></li>
+						<li><a href="<?php echo esc_url( home_url( '/category/technology-dx/' ) ); ?>"><?php esc_html_e( 'Technology & DX', 'logishift' ); ?></a></li>
+						<li><a href="<?php echo esc_url( home_url( '/category/cost-efficiency/' ) ); ?>"><?php esc_html_e( 'Cost & Efficiency', 'logishift' ); ?></a></li>
+						<li><a href="<?php echo esc_url( home_url( '/category/scm/' ) ); ?>"><?php esc_html_e( 'SCM', 'logishift' ); ?></a></li>
+						<li><a href="<?php echo esc_url( home_url( '/category/case-studies/' ) ); ?>"><?php esc_html_e( 'Case Studies', 'logishift' ); ?></a></li>
+						<?php
+					}
+					?>
 				</ul>
 			</nav><!-- #site-navigation -->
 		</div>

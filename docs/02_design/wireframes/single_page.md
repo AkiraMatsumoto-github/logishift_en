@@ -1,36 +1,37 @@
-# ワイヤーフレーム: 記事詳細ページ
+# Wireframe: Single Article Page
 
-## 概要
-- **ファイル名**: `single.php`
-- **役割**: 記事コンテンツを読みやすく提供し、読者の課題解決とコンバージョン（回遊、CTA）につなげる。
-- **デザイン方針**: Mobile-First, Flat Design (No Shadows/Gradients).
+## Overview
+- **File**: `single.php`
+- **Role**: Present article content legibly and encourage user engagement (circulation, CTA).
+- **Design Policy**: Mobile-First, Flat Design (No Shadows/Gradients).
 
-## レイアウト (Desktop / Mobile)
+## Layout (Desktop / Mobile)
 
 ### Desktop (> 768px)
 ```text
 +-----------------------------------------------------------------------+
 | [Header]                                                              |
 +-----------------------------------------------------------------------+
-| [Breadcrumb] Home > カテゴリ > 記事タイトル                           |
+| [Breadcrumb] Home > Category > Article Title                          |
 +-----------------------------------------------------------------------+
 | [Main Content] (Left/Center)        | [Sidebar] (Right)               |
 |                                     |                                 |
 |  [Article Header]                   | [Search Widget] (Flat Input)    |
 |  [Category Label] (Flat Badge)      |                                 |
-|  <h1>記事タイトル:                  | [Table of Contents] (Sticky)    |
-|      物流コスト削減の5つの手順</h1> | (Border-left style)             |
-|  Date: ...  Update: ...             |                                 |
-|                                     | [Popular Posts]                 |
-|  [Eye Catch Image] (No Shadow)      |                                 |
-|                                     | [CTA Banner]                    |
+|  <h1>Article Title:                 | [Table of Contents] (Sticky)    |
+|      5 Steps to Cut Logistics Costs | (Border-left style)             |
+|  </h1>                              |                                 |
+|  Date: ...  Update: ...             | [Popular Posts]                 |
+|                                     |                                 |
+|  [Eye Catch Image] (No Shadow)      | [CTA Banner]                    |
+|                                     |                                 |
 |  [Lead Text]                        |                                 |
 |                                     |                                 |
 |  [Table of Contents] (In-article)   |                                 |
 |  (Background: #F8F9FA, Flat)        |                                 |
 |                                     |                                 |
-|  <h2>1. 見出し</h2>                 |                                 |
-|  本文テキスト...                    |                                 |
+|  <h2>1. Heading</h2>                |                                 |
+|  Body text...                       |                                 |
 |                                     |                                 |
 |  [CTA Box] (Border only)            |                                 |
 |                                     |                                 |
@@ -43,7 +44,7 @@
 ```
 
 ### Mobile (< 768px)
-- **特徴**: サイドバーなし、メインコンテンツ100%幅。
+- **Features**: No sidebar, main content 100% width.
 ```text
 +---------------------------------------+
 | [Header] Logo      [Hamburger Menu =] |
@@ -53,7 +54,7 @@
 | [Main Content] (Full Width)           |
 |                                       |
 |  [Category Label]                     |
-|  <h1>記事タイトル (24px)</h1>         |
+|  <h1>Article Title (24px)</h1>        |
 |  Date: ...                            |
 |                                       |
 |  [Eye Catch Image]                    |
@@ -62,8 +63,8 @@
 |                                       |
 |  [Table of Contents] (Accordion?)     |
 |                                       |
-|  <h2>1. 見出し</h2>                   |
-|  本文テキスト...                      |
+|  <h2>1. Heading</h2>                  |
+|  Body text...                         |
 |                                       |
 |  [CTA Box] (Stack Layout)             |
 |                                       |

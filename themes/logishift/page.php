@@ -13,7 +13,7 @@ get_header();
 		
 		<!-- Breadcrumb -->
 		<div class="breadcrumb">
-			<span><a href="<?php echo esc_url( home_url( '/' ) ); ?>">Home</a></span>
+			<span><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Home', 'logishift' ); ?></a></span>
 			<span class="sep">&gt;</span>
 			<span class="current"><?php the_title(); ?></span>
 		</div>

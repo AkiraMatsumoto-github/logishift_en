@@ -15,7 +15,7 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
     
-    - name: Deploy theme files
+    - name: Deploy theme files (EN)
       uses: appleboy/scp-action@master
       with:
         host: ${{ secrets.SERVER_HOST }}
@@ -23,7 +23,7 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.SSH_PORT }}
         source: "themes/logishift/*"
-        target: "~/logishift.net/public_html/wp-content/themes/"
+        target: "~/logishift.net/public_html/en.logishift.net/wp-content/themes/"
         strip_components: 1
         rm: true
     
@@ -35,5 +35,5 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.SSH_PORT }}
         script: |
-          chmod -R 755 ~/logishift.net/public_html/wp-content/themes/logishift
+          chmod -R 755 ~/logishift.net/public_html/en.logishift.net/wp-content/themes/logishift
           echo "✅ デプロイ完了！"

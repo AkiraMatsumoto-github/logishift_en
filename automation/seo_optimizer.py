@@ -33,20 +33,19 @@ class SEOOptimizer:
         Returns:
             str: Meta description
         """
-        prompt = f"""以下の記事のメタディスクリプションを作成してください。
-
-タイトル: {title}
-キーワード: {keyword}
-本文（抜粋）: {content[:500]}
-
-【要件】
-- 文字数: 150-160文字（厳守）
-- 検索ユーザーのクリックを誘う魅力的な文章
-- キーワードを自然に含める
-- 記事の核心的な価値を伝える
-
-メタディスクリプションのみを出力してください（前置きや説明は不要）。
-"""
+        prompt = f"""Create a compelling meta description for this article.
+        
+        Title: {title}
+        Keyword: {keyword}
+        Content (excerpt): {content[:500]}
+        
+        Requirements:
+        - Length: 150-160 characters (strict).
+        - Goal: Maximize Click-Through Rate (CTR) for search engine users.
+        - Tone: Professional yet engaging.
+        - Content: Summarize the core value proposition and include the keyword naturally.
+        - Output: ONLY the meta description text. No preamble.
+        """
         
         try:
             response = self.gemini.generate_content(prompt)
@@ -66,7 +65,8 @@ class SEOOptimizer:
     
     def _generate_fallback_description(self, title, keyword):
         """Generate a simple fallback meta description."""
-        return f"{keyword}について解説。{title}をわかりやすく説明します。物流DX・倉庫管理の最新情報をお届けします。"[:160]
+        base = f"Learn about {keyword} and {title}. LogiShift Global provides the latest insights on logistics DX, warehouse automation, and supply chain management strategies."
+        return base[:160]
     
     def create_json_ld(self, article_data):
         """
@@ -90,7 +90,7 @@ class SEOOptimizer:
             "headline": article_data.get("title", ""),
             "author": {
                 "@type": "Organization",
-                "name": "LogiShift編集部"
+                "name": "LogiShift Editorial Team"
             },
             "publisher": {
                 "@type": "Organization",
@@ -139,8 +139,8 @@ class SEOOptimizer:
             "og:type": "article",
             "og:title": title,
             "og:description": description,
-            "og:site_name": "LogiShift",
-            "og:locale": "ja_JP",
+            "og:site_name": "LogiShift Global",
+            "og:locale": "en_US",
             
             # Twitter Card
             "twitter:card": "summary_large_image",
@@ -170,29 +170,48 @@ class SEOOptimizer:
         if len(title) <= 60:
             return title
         
-        # If too long, try to shorten intelligently
-        # Remove subtitle after colon or dash
-        if "：" in title:
-            main_title = title.split("：")[0]
-            if len(main_title) >= 30:
-                return main_title
-        
-        if "｜" in title:
-            main_title = title.split("｜")[0]
-            if len(main_title) >= 30:
-                return main_title
-        
-        # If still too long, truncate
-        return title[:57] + "..."
+
+        # If too long, use Gemini to rewriting it intelligently while keeping the keyword
+        try:
+            prompt = f"""
+            Rewrite the following article title to be under 60 characters for SEO.
+            Must keep the core meaning and keywords.
+            
+            Original Title: {title}
+            
+            Output ONLY the simplified title.
+            """
+            response = self.gemini.generate_content(prompt)
+            optimized_title = response.text.strip()
+            
+            # Post-check
+            if len(optimized_title) <= 65: # Allow slightly over 60 flexibility
+                return optimized_title.strip('"') # Remove quotes if any
+            else:
+                # Fallback to smart truncation if AI fails to shorten enough
+                # Try splitting by colon/dash but prioritize the part with more semantic weight?
+                # Actually, if AI failed, just truncate safely.
+                return title[:57] + "..."
+                
+        except Exception as e:
+            print(f"Warning: Title optimization failed: {e}")
+            # Fallback to naive truncation
+            separators = [":", " - ", "|"]
+            for sep in separators:
+                if sep in title:
+                    parts = title.split(sep)
+                    if len(parts[0]) >= 20 and len(parts[0]) <= 60:
+                        return parts[0].strip()
+            return title[:57] + "..."
 
 
 if __name__ == "__main__":
     # Test
     optimizer = SEOOptimizer()
     
-    test_title = "物流DXを加速する自動倉庫とロボット：導入事例から学ぶ成功戦略"
-    test_keyword = "自動倉庫 ロボット"
-    test_content = "物流業界において、自動倉庫とロボットの導入は..."
+    test_title = "Warehouse Automation & Robotics: Strategies for Success"
+    test_keyword = "Warehouse Automation"
+    test_content = "In today's logistics landscape, warehouse automation is no longer optional..."
     
     # Test meta description
     meta_desc = optimizer.generate_meta_description(test_title, test_content, test_keyword)

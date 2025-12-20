@@ -1,49 +1,51 @@
-# ワイヤーフレーム: トップページ
+# Wireframe: Front Page
 
-## 概要
-- **ファイル名**: `front-page.php`
-- **役割**: サイトの顔として、ブランドイメージの訴求と主要コンテンツへの導線を確保する。
-- **デザイン方針**: Mobile-First, Flat Design (No Shadows/Gradients).
+## Overview
+- **File**: `front-page.php`
+- **Role**: Serve as the face of the site, conveying brand image and providing navigation to key content.
+- **Design Policy**: Mobile-First, Flat Design (No Shadows/Gradients).
 
-## レイアウト (Desktop / Mobile)
+## Layout (Desktop / Mobile)
 
 ### Desktop (> 768px)
 ```text
 +-----------------------------------------------------------------------+
-| [Header] Logo: LogiShift | Nav: [基礎] [コスト] [DX] [トレンド] [検索] |
+| [Header] Logo: LogiShift Global                                       |
+| Nav: [Global Trends] [Tech & DX] [Cost] [SCM] [Search]                |
 +-----------------------------------------------------------------------+
 | [Hero Section] (Flat Color Background)                                |
-| "物流DXで未来を創る LogiShift"                                        |
-| [ 最新記事を読む (Flat Button) ]                                      |
+| "Shaping the Future of Logistics with DX"                             |
+| [ Read Latest Articles (Flat Button) ]                                |
 +-----------------------------------------------------------------------+
-| [Featured Articles] (最新記事)                                        |
+| [Featured Articles]                                                   |
 | +-----------+ +-----------+ +-----------+                             |
 | | [Thumb]   | | [Thumb]   | | [Thumb]   |                             |
 | | Title...  | | Title...  | | Title...  |                             |
 | +-----------+ +-----------+ +-----------+                             |
 +-----------------------------------------------------------------------+
-| [Category List] (Loop: DX, WMS, TMS, Handling, SupplyChain, Cases)    |
+| [Category Sections]                                                   |
+| (Loop: Global Trends, Technology & DX, Cost & Efficiency, SCM, Cases) |
 |                                                                       |
-|  Title: 物流DX・トレンド                                              |
+|  Title: Technology & DX                                               |
 |  +-----------+ +-----------+ +-----------+                            |
 |  | [Thumb]   | | [Thumb]   | | [Thumb]   |                            |
 |  +-----------+ +-----------+ +-----------+                            |
-|  [ 一覧へ -> ]                                                        |
+|  [ View More -> ]                                                     |
 |                                                                       |
 |  (Repeats for other categories...)                                    |
 +-----------------------------------------------------------------------+
-| [Global Trends] (海外トレンド)                                        |
-| [ALL] [USA] [Europe] [China] [Asia] (Tabs)                            |
+| [Global Trends]                                                       |
+| [ALL] [Japan] [USA] [Europe] [Asia-Pacific] (Tabs)                    |
 | +-----------+ +-----------+ +-----------+                             |
 | | [Thumb]   | | [Thumb]   | | [Thumb]   |                             |
-| | 🇺🇸 USA    | | 🇪🇺 EU     | | 🇨🇳 CHN    |                             |
+| | 🇯🇵 JP      | | 🇺🇸 USA    | | 🇪🇺 EU     |                             |
 | +-----------+ +-----------+ +-----------+                             |
 | ... (Grid 3 cols)                                                     |
-| [ もっと見る -> ]                                                     |
+| [ View More -> ]                                                      |
 +-----------------------------------------------------------------------+
-| [By Issue] (課題別で探す)                                             |
+| [By Topic]                                                            |
 |                                                                       |
-|  [Icon] コスト削減         [Icon] 人手不足対策                        |
+|  [Icon] Sustainability    [Icon] Labor Shortage                       |
 |  +-----------+             +-----------+                              |
 |  | [Thumb]   |             | [Thumb]   |                              |
 |  | Title...  |             | Title...  |                              |
@@ -55,26 +57,26 @@
 ```
 
 ### Mobile (< 768px)
-- **特徴**: シングルカラム。記事リストは「横並び (Thumb Left, Text Right)」。
+- **Features**: Single column. Article list is "Side-by-side (Thumb Left, Text Right)".
 ```text
 +---------------------------------------+
 | [Header] Logo      [Hamburger Menu =] |
 +---------------------------------------+
 | [Hero Section]                        |
 +---------------------------------------+
-| [Featured Articles] (最新記事)        |
+| [Featured Articles]                   |
 | (Stack Layout - Horizontal Card)      |
 | +-----------------------------------+ |
 | | [Thumb] | [Category]              | |
-| | (Square)| 記事タイトル...         | |
+| | (Square)| Article Title...        | |
 | +-----------------------------------+ |
 | +-----------------------------------+ |
 | | [Thumb] | ...                     | |
 | +-----------------------------------+ |
 +---------------------------------------+
 | [Category List]                       |
-|  Title: 物流DX・トレンド              |
-|  [ 一覧へ -> ]                        |
+|  Title: Technology & DX               |
+|  [ View More -> ]                     |
 |  +--------------------------------+   |
 |  | [Thumb] | Title...             |   |
 |  +--------------------------------+   |
@@ -82,16 +84,16 @@
 |                                       |
 |  (Repeats...)                         |
 +---------------------------------------+
-| [Global Trends] (海外トレンド)        |
-| [ALL] [USA] [EU] [CN] [Asia] (Scroll) |
+| [Global Trends]                       |
+| [ALL] [JP] [USA] [EU] [Asia] (Scroll) |
 | +-----------------------------------+ |
-| | [Thumb] | 🇺🇸 USA                | |
+| | [Thumb] | 🇯🇵 JP                   | |
 | |         | Title...                | |
 | +-----------------------------------+ |
-| [ もっと見る -> ] (Button)            |
+| [ View More -> ] (Button)             |
 +---------------------------------------+
-| [By Issue] (課題別)                   |
-|  [Icon] コスト削減                    |
+| [By Topic]                            |
+|  [Icon] Sustainability                |
 |  (Horizontal Scroll Area)             |
 |  [Card] [Card] [Card]                 |
 +---------------------------------------+

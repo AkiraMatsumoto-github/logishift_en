@@ -80,59 +80,6 @@ WP_APP_PASSWORD=xxxx xxxx xxxx xxxx xxxx xxxx
 
 ---
 
-### 3. サーバーへのデプロイ
-
-#### 方法A: サーバー上で直接セットアップ
-
-```bash
-# サーバーにSSH接続
-ssh user@your-server.com
-
-# プロジェクトディレクトリを作成
-mkdir -p ~/logishift-automation
-cd ~/logishift-automation
-
-# ファイルをアップロード（ローカルから実行）
-scp -r automation/ user@your-server.com:~/logishift-automation/
-
-# サーバー上で仮想環境を作成
-python3 -m venv venv
-source venv/bin/activate
-
-# 依存関係をインストール
-pip install -r automation/requirements.txt
-
-# 環境変数ファイルを作成
-nano automation/.env
-# 上記の内容を貼り付けて保存
-```
-
-#### 方法B: Dockerを使用（推奨）
-
-```bash
-# Dockerfileを作成
-cat > Dockerfile << 'EOF'
-FROM python:3.11-slim
-
-WORKDIR /app
-
-COPY automation/requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
-COPY automation/ .
-
-CMD ["python", "pipeline.py"]
-EOF
-
-# Dockerイメージをビルド
-docker build -t logishift-automation .
-
-# 環境変数を渡して実行
-docker run --env-file automation/.env logishift-automation
-```
-
----
-
 ## セキュリティ設定
 
 ### 1. ファイルパーミッションの設定

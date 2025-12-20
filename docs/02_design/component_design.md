@@ -1,83 +1,108 @@
-# LogiShift 共通パーツ設計 (Component Design)
+# Component Design
 
-## 1. ボタン (Buttons)
+This document outlines the design system and component specifications for LogiShift (Global).
+It reflects the current "Flat Design" principles: no shadows, no gradients, and pill-shaped interactive elements.
+
+## 1. Buttons
 
 ### Primary Button (CTA)
-- **用途**: 「記事を読む」「お問い合わせ」など、主要なアクション。
-- **スタイル**:
-    - 背景: `Tech Blue (#00B4D8)` (Solid)
-    - 文字: `White (#FFFFFF)`
-    - 角丸: `4px`
-    - ボーダー: なし (Shadowなし)
-    - ホバー: 背景色を少し濃くする (`#0096B4`)。
+- **Usage**: Main actions like "Read More", "Contact Us".
+- **Style**:
+    - **Background**: `Tech Blue (#00B4D8)` (Solid)
+    - **Text**: `White (#FFFFFF)`
+    - **Border Radius**: `32px` (Pill-shaped)
+    - **Border**: None
+    - **Shadow**: None
+    - **Hover**: Background darkens slightly (`#0096B4`). No lift effect.
 
-- **サイズ**:
-    - パディング: `12px 32px`
+- **Size**:
+    - **Padding**: `14px 36px`
 
 ### Secondary Button (Outline)
-- **用途**: 「もっと見る」「キャンセル」など、副次的なアクション。
-- **スタイル**:
-    - 背景: 透明
-    - ボーダー: `1px solid Tech Blue`
-    - 角丸: `4px`
-    - 文字: `Tech Blue`
-    - ホバー: 背景を `Tech Blue` (opacity 10%) に、文字はそのまま。 or 背景 `Tech Blue` + 文字 `White`。
+- **Usage**: Secondary actions like "See More", "Cancel".
+- **Style**:
+    - **Background**: Transparent
+    - **Border**: `2px solid Tech Blue`
+    - **Border Radius**: `32px` (Pill-shaped)
+    - **Text**: `Tech Blue`
+    - **Hover**: Background becomes `Tech Blue`, Text becomes `White`.
 
 ### Text Link
-- **用途**: 文中のリンク、控えめな誘導。
-- **スタイル**:
-    - 文字: `Tech Blue`
-    - 下線: ホバー時に表示。
+- **Usage**: Inline links, subtle navigation.
+- **Style**:
+    - **Text**: `Tech Blue`
+    - **Underline**: Appears on hover.
+    - **Icon**: Optional arrow that moves slightly on hover (e.g., `text-link-arrow`).
 
-## 2. カード (Cards)
+## 2. Cards
 
-### 記事カード (Article Card)
-- **構成**:
-    - サムネイル画像 (アスペクト比 16:9)
-    - カテゴリラベル (画像左上 or タイトル上)
-    - タイトル (H3相当)
-    - メタ情報 (日付)
-- **スタイル**:
-    - 背景: `White`
-    - ボーダー: `1px solid Border Gray`
-    - 影 (Shadow): なし (`none`)
-    - 角丸: `8px`
-    - トランジション: ホバー時にボーダー色を `Tech Blue` に変化、または背景色をわずかに `Light Gray` へ。浮き上がり(Lift)は廃止。
+### Article Card
+- **Structure**:
+    - Thumbnail Image (Aspect Ratio 16:9)
+    - Category Label (Overlaid or above title)
+    - Title (H3 level)
+    - Meta Info (Date)
+- **Style**:
+    - **Background**: `White`
+    - **Border**: `1px solid Border Gray`
+    - **Shadow**: None
+    - **Border Radius**: `16px`
+    - **Transition**: Border color changes to `Tech Blue` on hover. No lift effect.
+    - **Image Interaction**: Slight zoom (scale 1.05) on hover.
 
-## 3. ラベル・バッジ (Labels & Badges)
+## 3. Labels & Badges
 
-### カテゴリラベル
-- **用途**: 記事のカテゴリを表示。
-- **スタイル**:
-    - 背景: `Navy Blue` (基本) または カテゴリごとの色分け（要検討）。
-    - 文字: `White`
-    - フォントサイズ: `0.75rem`
-    - 角丸: `2px`
-    - パディング: `4px 8px`
+### Category Label
+- **Usage**: Indicates the article category.
+- **Style**:
+    - **Background**: `Navy Blue (#0A192F)` (Default)
+    - **Text**: `White`
+    - **Font Size**: `0.7rem`
+    - **Border Radius**: `20px` (Pill-shaped)
+    - **Padding**: `4px 10px`
+    - **Text Transform**: Uppercase
 
-## 4. フォーム要素 (Forms)
+## 4. Form Elements
 
-- **Input / Textarea**:
-    - 背景: `White`
-    - ボーダー: `1px solid Border Gray`
-    - 影 (Shadow): なし (`none`)
-    - 角丸: `4px`
-    - パディング: `12px`
-    - フォーカス時: `Tech Blue` の太めのボーダー (`2px`)。Glow効果は廃止。
+### Inputs / Textareas
+- **Style**:
+    - **Background**: `White` or `Light Gray` (depending on context)
+    - **Border**: `1px solid Border Gray`
+    - **Shadow**: None
+    - **Border Radius**: `4px` (Slightly rounded for inputs, distinct from buttons) or `50px` for Search fields.
+    - **Padding**: `12px`
+    - **Focus**: `Tech Blue` border (`2px` solid). No glow.
 
-## 5. ナビゲーション (Navigation)
+## 5. Navigation
 
-### ヘッダーナビ
-- **PC**: テキストリンクの横並び。ホバーで下線アニメーション。
-- **SP**: ハンバーガーメニュー。展開時にドロワーメニューを表示。
+### Header Navigation
+- **Desktop**: Horizontal text links.
+    - **Style**: Pill-shaped hover effect (`border-radius: 20px`).
+    - **Hover**: Background `Tech Blue`, Text `White`.
+- **Mobile**: Hamburger menu. Expands to a drawer/vertical list.
 
-### パンくずリスト (Breadcrumbs)
-- **用途**: 現在位置の明示。
-- **スタイル**:
-    - 文字: `Medium Gray`
-    - 区切り文字: `>` (Chevron Right icon)
-    - 現在地: `Dark Gray` (太字なし)
+### Breadcrumbs
+- **Usage**: Indicates current page location.
+- **Style**:
+    - **Text**: `Medium Gray`
+    - **Separator**: `>` (Chevron Right)
+    - **Current Page**: `Dark Gray` (Regular weight)
 
-## 6. アイコン (Icons)
-- **ライブラリ**: `Phosphor Icons` または `Heroicons` (SVG) を使用。
-- **スタイル**: ライン（アウトライン）スタイルで統一し、洗練された印象にする。
+## 6. Typography & Icons
+
+### Typography
+- **Headings**: `Inter` (sans-serif), Bold (`700/800`).
+- **Body**: `Noto Sans JP` (or system sans-serif for Global), `line-height: 1.8`.
+
+### Icons
+- **Library**: `Phosphor Icons` or `Heroicons` (SVG).
+- **Style**: Line/Outline style. Consistent stroke width.
+
+## Color Palette Reference
+- **Tech Blue**: `#00B4D8`
+- **Tech Blue Dark**: `#0096B4`
+- **Navy Blue**: `#0A192F`
+- **White**: `#FFFFFF`
+- **Light Gray**: `#F8F9FA`
+- **Border Gray**: `#E0E0E0`
+- **Text**: `#333333`

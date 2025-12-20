@@ -16,26 +16,7 @@ import sys
 import subprocess
 from datetime import datetime
 
-# Source to Content Type Mapping
-SOURCE_TYPE_MAPPING = {
-    # Global Sources
-    "techcrunch": "global",
-    "wsj_logistics": "global",
-    "supply_chain_dive": "global",
-    "logistics_mgmt": "global",
-    "robot_report": "global",
-    "supply_chain_brain": "global",
-    "supply_chain_brain": "global",
-    "freightwaves": "global",
-    "robotics_automation_news": "global",
-    "36kr_japan": "global",
-    "pandaily": "global",
-    
-    # Domestic Sources
-    "lnews": "news",
-    "logistics_today": "news",
-    "logi_biz": "news",
-}
+
 
 def run_command(command):
     """Run a shell command and return output."""
@@ -51,7 +32,7 @@ def main():
     parser = argparse.ArgumentParser(description="LogiShift Automation Pipeline")
     parser.add_argument("--days", type=int, help="Days to look back for collection")
     parser.add_argument("--hours", type=int, default=3, help="Hours to look back for collection (overrides --days)")
-    parser.add_argument("--threshold", type=int, default=85, help="Score threshold for generation")
+    parser.add_argument("--threshold", type=int, default=70, help="Score threshold for generation")
     parser.add_argument("--limit", type=int, default=2, help="Max articles to generate per run")
     parser.add_argument("--score-limit", type=int, default=0, help="Max articles to score (0 for all)")
     parser.add_argument("--dry-run", action="store_true", help="Dry run mode (no posting)")
@@ -102,7 +83,7 @@ def main():
         print(f"[{i+1}/{len(articles_to_score)}] Scoring: {article['title'][:30]}...")
         scored = score_article(article)
         scored_articles.append(scored)
-        
+            
     # Filter
     high_score_articles = [a for a in scored_articles if a["score"] >= args.threshold]
     high_score_articles.sort(key=lambda x: x["score"], reverse=True)
@@ -137,7 +118,7 @@ def main():
         
         # Base command
         cmd = [
-            "python", os.path.join(base_dir, "generate_article.py"),
+            sys.executable, os.path.join(base_dir, "generate_article.py"),
             "--keyword", keyword,
             "--type", article_type
         ]

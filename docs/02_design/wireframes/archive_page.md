@@ -1,11 +1,11 @@
-# ワイヤーフレーム: 記事一覧ページ
+# Wireframe: Archive Page
 
-## 概要
-- **ファイル名**: `archive.php`, `home.php`, `search.php`
-- **役割**: 特定のテーマや条件に合致する記事を一覧表示し、目的の記事へ誘導する。
-- **デザイン方針**: Mobile-First, Flat Design (No Shadows/Gradients).
+## Overview
+- **File**: `archive.php`, `home.php`, `search.php`
+- **Role**: Display a list of articles matching a specific theme or condition, guiding users to their desired content.
+- **Design Policy**: Mobile-First, Flat Design (No Shadows/Gradients).
 
-## レイアウト (Desktop / Mobile)
+## Layout (Desktop / Mobile)
 
 ### Desktop (> 768px)
 ```text
@@ -14,8 +14,8 @@
 +-----------------------------------------------------------------------+
 | [Page Header] (Flat Background)                                       |
 |                                                                       |
-|    CATEGORY: 物流コスト削減                                           |
-|    "物流コスト削減に関する記事一覧です。"                             |
+|    CATEGORY: Cost Reduction                                           |
+|    "Articles related to logistics cost reduction."                    |
 |                                                                       |
 +-----------------------------------------------------------------------+
 | [Main Content] (Left/Center)        | [Sidebar] (Right)               |
@@ -24,8 +24,8 @@
 | | [Thumbnail Image]             |   |                                 |
 | |                               |   | [Popular Posts]                 |
 | | [Category] 2025.11.23         |   |                                 |
-| | 記事タイトル (H3)             |   | [Categories Widget]             |
-| | 抜粋テキスト...               |   |                                 |
+| | Article Title (H3)            |   | [Categories Widget]             |
+| | Excerpt text...               |   |                                 |
 | +-------------------------------+   | [Tags Cloud] (Flat Badges)      |
 | (Border: 1px solid Gray)            |                                 |
 | (No Shadow)                         | [CTA Banner]                    |
@@ -43,20 +43,20 @@
 ```
 
 ### Mobile (< 768px)
-- **特徴**: サイドバーなし、記事カード積み上げ。
+- **Features**: No sidebar, stacked article cards.
 ```text
 +---------------------------------------+
 | [Header] Logo      [Hamburger Menu =] |
 +---------------------------------------+
 | [Page Header]                         |
-|  CATEGORY: 物流コスト削減             |
+|  CATEGORY: Cost Reduction             |
 +---------------------------------------+
 | [Main Content] (Full Width)           |
 |                                       |
 | +-----------------------------------+ |
 | | [Thumb] | [Category]              | |
-| | (Square)| 記事タイトル            | |
-| |         | 抜粋...                 | |
+| | (Square)| Article Title           | |
+| |         | Excerpt...              | |
 | +-----------------------------------+ |
 | (Border-bottom separator)             |
 |                                       |

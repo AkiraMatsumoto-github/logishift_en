@@ -1,44 +1,44 @@
-# LogiShift サイトマップ
+# LogiShift Global Sitemap
 
-## 構造図
+## Structure Diagram
 
 ```mermaid
 graph TD
-    Home[トップページ /]
+    Home[Home /]
     
-    subgraph Archives [記事一覧系]
-        Cat[カテゴリ一覧 /category/slug/]
-        Tag[タグ一覧 /tag/slug/]
-        Search[検索結果 /?s=keyword]
-        Date[月別アーカイブ /date/yyyy/mm/]
+    subgraph Archives [Archives]
+        Cat[Categories /category/slug/]
+        Tag[Tags /tag/slug/]
+        Search[Search Results /?s=keyword]
     end
 
-    subgraph Categories [主要カテゴリ]
-        Cat1[物流DX・トレンド /category/logistics-dx/]
-        Cat2[倉庫管理・WMS /category/warehouse-management/]
-        Cat3[輸配送・TMS /category/transportation/]
-        Cat4[マテハン・ロボット /category/material-handling/]
-        Cat5[サプライチェーン /category/supply-chain/]
-        Cat6[事例・インタビュー /category/case-studies/]
-        Cat7[海外トレンド /category/news-global/]
+    subgraph Categories [Core Categories]
+        Cat1[Global Trends /category/global-trends/]
+        Cat3[Technology & DX /category/technology-dx/]
+        Cat4[Cost & Efficiency /category/cost-efficiency/]
+        Cat5[Supply Chain Management /category/scm/]
+        Cat6[Case Studies /category/case-studies/]
+        Cat7[Logistics Startups /category/startups/]
     end
 
-    subgraph ThemeTags [課題別タグ]
-        Tag1[コスト削減 /tag/cost-reduction/]
-        Tag2[人手不足対策 /tag/labor-shortage/]
-        Tag3[品質向上 /tag/quality-improvement/]
-    end
-
-    subgraph Regions [海外トレンド]
-        Reg1[アメリカ /tag/usa/]
-        Reg2[ヨーロッパ /tag/europe/]
-        Reg3[中国 /tag/china/]
-        Reg4[東南アジア /tag/southeast-asia/]
+    subgraph RegionTags [Regions]
+        RegJP[Japan /tag/japan/]
+        RegUS[North America /tag/usa/]
+        RegEU[Europe /tag/europe/]
+        RegASIA[Asia-Pacific /tag/asia-pacific/]
     end
     
-    subgraph Singles [詳細ページ系]
-        Post[記事詳細 /post-slug/]
-        Page[固定ページ /page-slug/]
+    subgraph TopicTags [Topics]
+        Tag1[Sustainability /tag/sustainability/]
+        Tag2[Labor Shortage /tag/labor-shortage/]
+        Tag3[Last Mile /tag/last-mile/]
+        Tag4[Warehouse Automation /tag/automation/]
+        Tag5[Kaizen /tag/kaizen/]
+    end
+    
+    subgraph Singles [Single Pages]
+        Post[Article /post-slug/]
+        Page[Page /page-slug/]
     end
     
     Home --> Cat
@@ -48,63 +48,57 @@ graph TD
     Home --> Page
 
     Cat --> Cat1
-    Cat --> Cat2
     Cat --> Cat3
     Cat --> Cat4
     Cat --> Cat5
     Cat --> Cat6
     Cat --> Cat7
 
+    Tag --> RegJP
+    Tag --> RegUS
+    Tag --> RegEU
+    Tag --> RegASIA
+    
     Tag --> Tag1
     Tag --> Tag2
     Tag --> Tag3
-    Tag --> Reg1
-    Tag --> Reg2
-    Tag --> Reg3
-    Tag --> Reg4
+    Tag --> Tag4
+    Tag --> Tag5
     
     Cat1 --> Post
-    Cat2 --> Post
     Cat3 --> Post
-    Cat4 --> Post
-    Cat5 --> Post
-    Cat6 --> Post
     Cat7 --> Post
     
-    %% 具体的な固定ページ
-    Page --> About[運営者情報 /about/]
-    Page --> Contact[お問い合わせ /contact/]
-    Page --> Policy[プライバシーポリシー /privacy-policy/]
-    Page --> Sitemap[サイトマップ /sitemap/]
+    %% Static Pages
+    Page --> About[About Us /about/]
+    Page --> Contact[Contact /contact/]
+    Page --> Policy[Privacy Policy /privacy-policy/]
 ```
 
-## URL設計
+## URL Design
 
-| ページ種類 | URLパターン | 備考 |
+| Page Type | URL Pattern | Notes |
 | :--- | :--- | :--- |
-| トップページ | `https://logishift.jp/` | |
-| 記事詳細 | `https://logishift.jp/{post-slug}/` | 英単語のスラッグを推奨 |
-| **主要カテゴリ** | | |
-| 物流DX・トレンド | `https://logishift.jp/category/logistics-dx/` | |
-| 倉庫管理・WMS | `https://logishift.jp/category/warehouse-management/` | |
-| 輸配送・TMS | `https://logishift.jp/category/transportation/` | |
-| マテハン・ロボット | `https://logishift.jp/category/material-handling/` | |
-| サプライチェーン | `https://logishift.jp/category/supply-chain/` | |
-| 海外トレンド | `https://logishift.jp/category/news-global/` | |
-| 事例・インタビュー | `https://logishift.jp/category/case-studies/` | |
-| **課題別タグ** | | |
-| コスト削減 | `https://logishift.jp/tag/cost-reduction/` | |
-| 人手不足対策 | `https://logishift.jp/tag/labor-shortage/` | |
-| 品質向上 | `https://logishift.jp/tag/quality-improvement/` | |
-| **海外トレンド** | | |
-| アメリカ | `https://logishift.jp/tag/usa/` | |
-| ヨーロッパ | `https://logishift.jp/tag/europe/` | |
-| 中国 | `https://logishift.jp/tag/china/` | |
-| 東南アジア | `https://logishift.jp/tag/southeast-asia/` | |
-| **その他** | | |
-| 固定ページ (汎用) | `https://logishift.jp/{slug}/` | |
-| 運営者情報 | `https://logishift.jp/about/` | |
-| お問い合わせ | `https://logishift.jp/contact/` | |
-| プライバシーポリシー | `https://logishift.jp/privacy-policy/` | |
-| サイトマップ | `https://logishift.jp/sitemap/` | |
-| 検索結果 | `https://logishift.jp/?s={keyword}` | |
+| Home | `https://en.logishift.net/` | |
+| Article | `https://en.logishift.net/{post-slug}/` | English slugs required |
+| **Categories** | | |
+| Global Trends | `https://en.logishift.net/category/global-trends/` | Synthesis of world news |
+| Technology & DX | `https://en.logishift.net/category/technology-dx/` | WMS, Robots, AI |
+| Cost & Efficiency | `https://en.logishift.net/category/cost-efficiency/` | Management focus |
+| Supply Chain | `https://en.logishift.net/category/scm/` | |
+| Case Studies | `https://en.logishift.net/category/case-studies/` | |
+| **Logistics Startups** | `https://en.logishift.net/category/startups/` | **New Players & Innovation** |
+| **Region Tags** | | |
+| **Japan** | `https://en.logishift.net/tag/japan/` | **Core Content Source** |
+| North America | `https://en.logishift.net/tag/usa/` | |
+| Europe | `https://en.logishift.net/tag/europe/` | |
+| Asia-Pacific | `https://en.logishift.net/tag/asia-pacific/` | |
+| **Topic Tags** | | |
+| Sustainability | `https://en.logishift.net/tag/sustainability/` | ESG, Green Logistics |
+| Labor Shortage | `https://en.logishift.net/tag/labor-shortage/` | |
+| Warehouse Automation | `https://en.logishift.net/tag/automation/` | |
+| **Kaizen** | `https://en.logishift.net/tag/kaizen/` | Japanese Methodology |
+| **Others** | | |
+| About Us | `https://en.logishift.net/about/` | |
+| Contact | `https://en.logishift.net/contact/` | |
+| Privacy Policy | `https://en.logishift.net/privacy-policy/` | |
