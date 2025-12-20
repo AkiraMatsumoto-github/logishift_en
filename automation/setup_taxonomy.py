@@ -106,6 +106,43 @@ def create_tags(wp):
             "description": "Logistics in the rapidly growing ASEAN and Chinese markets. Cross-border EC trends and manufacturing shifts."
         },
         
+        # Industry
+        {
+            "name": "Manufacturing", 
+            "slug": "manufacturing",
+            "description": "Logistics strategies for manufacturers. JIT delivery, parts procurement optimization, and factory automation."
+        },
+        {
+            "name": "Retail", 
+            "slug": "retail",
+            "description": "Supply chain solutions for the retail sector. Omnichannel logistics, store replenishment, and inventory visibility."
+        },
+        {
+            "name": "eCommerce", 
+            "slug": "ecommerce",
+            "description": "Fulfillment strategies for online retailers. Fast shipping, returns management (reverse logistics), and packaging."
+        },
+        {
+            "name": "3PL / Warehousing", 
+            "slug": "3pl-warehouse",
+            "description": "Trends for Third-Party Logistics providers and warehouse operators. Contract logistics, multi-client operations, and value-added services."
+        },
+        {
+            "name": "Food & Beverage", 
+            "slug": "food-beverage",
+            "description": "Cold chain logistics and freshness management. HACCP compliance and temperature-controlled transportation."
+        },
+        {
+            "name": "Apparel", 
+            "slug": "apparel",
+            "description": "Fashion logistics trends. Handling seasonality, SKU proliferation, and RFID implementation for inventory accuracy."
+        },
+        {
+            "name": "Medical / Pharma", 
+            "slug": "medical",
+            "description": "Healthcare logistics and GDP compliance. Secure transport of pharmaceuticals and medical devices."
+        },
+        
         # Topics
         {
             "name": "Sustainability", 
