@@ -78,7 +78,7 @@ class GeminiClient:
                 print(f"Vertex AI Auth failed ({e}). Switching to API Key...")
                 try:
                     self.use_vertex = False
-                    self.client = genai.Client(api_key=self.api_key)
+                    self.client = genai.Client(api_key=self.api_key, vertexai=False)
                     # Retry with new client
                     response = self._retry_request(
                         self.client.models.generate_content,
@@ -751,6 +751,49 @@ class GeminiClient:
                 "summary": "Check out our latest logistics insights here!",
                 "hashtags": ["#LogiShift", "#Logistics"]
             }
+
+    def check_duplication(self, new_title, new_summary, existing_titles):
+        """
+        Check if the new article is a duplicate of any existing articles using Gemini.
+        Returns: True if duplicate, False otherwise.
+        """
+        if not existing_titles:
+            return False
+
+        # Prepare the list of existing titles for the prompt
+        existing_list_str = "\n".join([f"- {title}" for title in existing_titles])
+
+        prompt = f"""
+        You are a duplicate detection system for a logistics news site.
+        Your task is to determine if a NEW article covers the *same specific news event or core topic* as any of the EXISTING articles.
+        
+        NEW ARTICLE:
+        Title: {new_title}
+        Summary: {new_summary}
+
+        EXISTING ARTICLES:
+        {existing_list_str}
+
+        Instructions:
+        - Return "TRUE" if the new article is a duplicate of any existing article (i.e., same news story, same company announcement, same press release).
+        - Return "FALSE" if it is a new topic, a different angle, or a different company/product.
+        - Be strict. If it's the same press release covered by a different site, it IS a duplicate.
+        - Output ONLY "TRUE" or "FALSE".
+        """
+        
+        try:
+            # Use self.generate_content to leverage built-in retry and auth fallback logic
+            response = self.generate_content(prompt, model='gemini-2.0-flash-exp') # Use Flash for speed/cost
+            
+            if response and response.text:
+                result = response.text.strip().upper()
+                print(f"Duplication Check: {result} (Article: {new_title})")
+                return "TRUE" in result
+            return False
+        except Exception as e:
+            print(f"Error checking duplication: {e}")
+            # If check fails, assume NOT duplicate to avoid blocking valid content (fail open)
+            return False
 
 if __name__ == "__main__":
     # Test generation
