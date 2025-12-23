@@ -57,11 +57,12 @@ class ArticleClassifier:
         - Safety / BCP (safety-bcp)
         - Subsidy (subsidy)
 
-        ## 4. Region Tags (Select 1 if a specific region is the primary focus, else empty)
+        ## 4. Region Tags (Select 1 (REQUIRED))
         - USA / North America (usa)
         - Europe (europe)
         - Asia-Pacific (asia-pacific)
         - Japan (japan)
+        * Note: You MUST select exactly one region. If the news is global, select the most dominant region or origin.
 
         ## Output Format (Strict JSON)
         {{
