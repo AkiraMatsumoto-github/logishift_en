@@ -274,111 +274,91 @@ get_header();
 	endforeach;
 	?>
 
-	<!-- Global Trends Section with Regional Filtering -->
-	<section class="global-trends-section">
+	<!-- Regional Updates Section -->
+	<section class="regional-updates-section" style="background-color: #fff;">
 		<div class="container">
 			<div class="section-header">
 				<div class="section-header-content">
-					<h2 class="section-title"><?php esc_html_e( 'Global Trends', 'logishift' ); ?></h2>
-					<p class="section-description"><?php esc_html_e( 'Latest logistics DX cases and insights from around the world.', 'logishift' ); ?></p>
+					<h2 class="section-title"><?php esc_html_e( 'Search by Region', 'logishift' ); ?></h2>
+					<p class="section-description"><?php esc_html_e( 'Logistics updates and market trends by region.', 'logishift' ); ?></p>
 				</div>
 			</div>
 
-			<!-- Regional Filter Tabs -->
-			<div class="region-filter-tabs">
-				<?php
-				$global_cat = get_category_by_slug( 'news-global' );
-				$global_url = $global_cat ? get_category_link( $global_cat ) : '#';
-				?>
-				<button class="region-tab active" data-region="all" data-url="<?php echo esc_url( $global_url ); ?>"><?php esc_html_e( 'All', 'logishift' ); ?></button>
-				
-				<?php
-				$regions = array(
-					'japan'          => array( 'label' => 'Japan' ),
-					'usa'            => array( 'label' => 'North America' ),
-					'europe'         => array( 'label' => 'Europe' ),
-					'asia-pacific'   => array( 'label' => 'Asia-Pacific' ),
-				);
+			<?php
+			$region_tags = array(
+				array( 'slug' => 'japan', 'name' => 'Japan' ),
+				array( 'slug' => 'usa', 'name' => 'North America' ),
+				array( 'slug' => 'europe', 'name' => 'Europe' ),
+				array( 'slug' => 'asia-pacific', 'name' => 'Asia-Pacific' ),
+			);
+			?>
 
-				foreach ( $regions as $slug => $info ) :
-					$tag = get_term_by( 'slug', $slug, 'post_tag' );
-					$url = $tag ? get_tag_link( $tag ) : '#';
-					?>
-					<button class="region-tab" data-region="<?php echo esc_attr( $slug ); ?>" data-url="<?php echo esc_url( $url ); ?>">
-						<?php echo esc_html( $info['label'] ); ?>
+			<!-- Region Tabs -->
+			<div class="region-filter-tabs region-tabs">
+				<?php foreach ( $region_tags as $index => $r_tag ) : 
+					$active_class = $index === 0 ? 'active' : '';
+				?>
+					<button class="region-tab <?php echo $active_class; ?>" data-region="<?php echo esc_attr( $r_tag['slug'] ); ?>">
+						<?php echo esc_html( $r_tag['name'] ); ?>
 					</button>
 				<?php endforeach; ?>
 			</div>
 
-			<div class="global-articles-container">
-				<?php
-				// Get all global trend articles with regional tags
-				$global_args = array(
-					'category_name'  => 'news-global',
-					'posts_per_page' => 6,
-					'orderby'        => 'date',
-					'order'          => 'DESC',
-				);
-				$global_query = new WP_Query( $global_args );
-
-				if ( $global_query->have_posts() ) :
-					?>
-					<div class="article-grid global-grid">
-						<?php
-						while ( $global_query->have_posts() ) :
-							$global_query->the_post();
-							$post_tags = get_the_tags();
-							$region_tags = array();
-							
-							if ( $post_tags ) {
-								foreach ( $post_tags as $tag ) {
-									if ( in_array( $tag->slug, array( 'usa', 'europe', 'asia-pacific', 'japan', 'global' ) ) ) {
-										$region_tags[] = $tag->slug;
-									}
-								}
-							}
-							
-							$region_data = ! empty( $region_tags ) ? implode( ' ', $region_tags ) : 'all';
-							?>
-							<article id="post-<?php the_ID(); ?>" <?php post_class( 'article-card global-article' ); ?> data-regions="<?php echo esc_attr( $region_data ); ?>">
-								<div class="article-thumbnail">
-									<?php if ( has_post_thumbnail() ) : ?>
-										<a href="<?php the_permalink(); ?>"><?php the_post_thumbnail( 'medium' ); ?></a>
-									<?php else : ?>
-										<a href="<?php the_permalink(); ?>"><div class="no-image"></div></a>
-									<?php endif; ?>
-								</div>
-								<div class="article-content">
-									<div class="article-meta">
-										<?php if ( ! empty( $region_tags ) ) : ?>
-											<span class="region-label"><?php echo esc_html( $region_tags[0] ); ?></span>
-										<?php endif; ?>
-										<span class="posted-on"><?php echo get_the_date(); ?></span>
-									</div>
-									<h3 class="article-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-								</div>
-							</article>
+			<!-- Region Content Blocks -->
+			<div class="region-content-container">
+				<?php foreach ( $region_tags as $index => $r_tag ) : 
+					$display_style = $index === 0 ? 'block' : 'none';
+				?>
+					<div class="region-tag-block" id="region-block-<?php echo esc_attr( $r_tag['slug'] ); ?>" style="display: <?php echo $display_style; ?>;">
+						<div class="article-grid">
 							<?php
-						endwhile;
-						wp_reset_postdata();
-						?>
-					</div>
-					
-					<!-- Show More Button -->
-					<div class="global-show-more-container" style="text-align: right; margin-top: 24px;">
-						<a href="<?php echo esc_url( $global_url ); ?>" class="text-link-arrow global-show-more-link">
-							<?php esc_html_e( 'View More', 'logishift' ); ?> →
-						</a>
-					</div>
+							$r_args = array(
+								'tag'            => $r_tag['slug'],
+								'posts_per_page' => 3, 
+								'orderby'        => 'date',
+								'order'          => 'DESC',
+							);
+							$r_query = new WP_Query( $r_args );
 
-				<?php else : ?>
-					<p class="no-posts"><?php esc_html_e( 'No posts found.', 'logishift' ); ?></p>
-				<?php endif; ?>
+							if ( $r_query->have_posts() ) :
+								while ( $r_query->have_posts() ) :
+									$r_query->the_post();
+									?>
+									<article id="post-<?php the_ID(); ?>" <?php post_class( 'article-card' ); ?>>
+										<div class="article-thumbnail">
+											<?php if ( has_post_thumbnail() ) : ?>
+												<a href="<?php the_permalink(); ?>"><?php the_post_thumbnail( 'medium' ); ?></a>
+											<?php else : ?>
+												<a href="<?php the_permalink(); ?>"><div class="no-image"></div></a>
+											<?php endif; ?>
+										</div>
+										<div class="article-content">
+											<div class="article-meta">
+												<span class="posted-on"><?php echo get_the_date(); ?></span>
+											</div>
+											<h3 class="article-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+										</div>
+									</article>
+									<?php
+								endwhile;
+								wp_reset_postdata();
+							else:
+								echo '<p>' . esc_html__( 'No posts found.', 'logishift' ) . '</p>';
+							endif;
+							?>
+						</div>
+						<div style="text-align: right; margin-top: 24px;">
+							<a href="<?php echo esc_url( get_tag_link( get_term_by( 'slug', $r_tag['slug'], 'post_tag' ) ) ); ?>" class="text-link-arrow">
+								<?php esc_html_e( 'View More', 'logishift' ); ?> →
+							</a>
+						</div>
+					</div>
+				<?php endforeach; ?>
 			</div>
 		</div>
 	</section>
 
-	<!-- Industry Tags (New) -->
+	<!-- Industry Tags -->
 	<section class="industry-tags-section" style="background-color: var(--color-light-gray);">
 		<div class="container">
 			<div class="section-header">
@@ -567,56 +547,27 @@ get_header();
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-	// 1. Global Trends Filter
-	const regionTabs = document.querySelectorAll('.global-trends-section .region-tab');
-	const globalArticles = document.querySelectorAll('.global-article');
-	const showMoreLink = document.querySelector('.global-show-more-link');
-	
-	function filterArticles(selectedRegion) {
-		let visibleCount = 0;
-		const isMobile = window.matchMedia("(max-width: 768px)").matches;
-		const limit = isMobile ? 3 : 999; 
-
-		globalArticles.forEach(article => {
-			const articleRegions = article.getAttribute('data-regions');
-			const shouldShow = (selectedRegion === 'all' || articleRegions.includes(selectedRegion));
-
-			if (shouldShow) {
-				if (visibleCount < limit) {
-					article.style.display = ''; 
-					visibleCount++;
-				} else {
-					article.style.display = 'none';
-				}
-			} else {
-				article.style.display = 'none';
-			}
-		});
-
-		if (showMoreLink) {
-			const activeTab = document.querySelector('.global-trends-section .region-tab[data-region="' + selectedRegion + '"]');
-			if (activeTab && activeTab.dataset.url) {
-				showMoreLink.href = activeTab.dataset.url;
-				showMoreLink.style.display = 'inline-block';
-			}
-		}
-	}
+	// 1. Region Tabs Logic
+	const regionTabs = document.querySelectorAll('.region-tabs .region-tab');
+	const regionBlocks = document.querySelectorAll('.region-tag-block');
 
 	regionTabs.forEach(tab => {
 		tab.addEventListener('click', function() {
 			const selectedRegion = this.getAttribute('data-region');
+
+			// Switch Tabs
 			regionTabs.forEach(t => t.classList.remove('active'));
 			this.classList.add('active');
-			filterArticles(selectedRegion);
+
+			// Switch Content
+			regionBlocks.forEach(block => {
+				if (block.id === 'region-block-' + selectedRegion) {
+					block.style.display = 'block';
+				} else {
+					block.style.display = 'none';
+				}
+			});
 		});
-	});
-
-	filterArticles('all');
-
-	window.addEventListener('resize', function() {
-		const activeTab = document.querySelector('.global-trends-section .region-tab.active');
-		const selectedRegion = activeTab ? activeTab.getAttribute('data-region') : 'all';
-		filterArticles(selectedRegion);
 	});
 
 	// 2. Industry Tabs Logic
