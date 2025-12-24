@@ -44,6 +44,7 @@
 							<li><a href="<?php echo esc_url( home_url( '/about/' ) ); ?>">About Us</a></li>
 							<li><a href="<?php echo esc_url( home_url( '/contact/' ) ); ?>">Contact</a></li>
 							<li><a href="<?php echo esc_url( home_url( '/privacy-policy/' ) ); ?>">Privacy Policy</a></li>
+							<li><a href="https://logishift.net/">LogiShift Japan</a></li>
 						</ul>
 					</div>
 				</div>
