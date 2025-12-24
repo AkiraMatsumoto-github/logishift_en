@@ -6,6 +6,8 @@ from google.genai import types
 from dotenv import load_dotenv
 import time
 import random
+import textwrap
+import re
 
 load_dotenv(override=True)
 
@@ -60,6 +62,39 @@ class GeminiClient:
                     # Not a quota error, raise immediately
                     raise e
 
+
+
+    def _sanitize_markdown(self, text):
+        """
+        Ensure Markdown is properly formatted for HTML conversion.
+        Specifically, ensures that lists are preceded by a blank line.
+        """
+        if not text:
+            return text
+            
+        lines = text.split('\n')
+        new_lines = []
+        
+        # Regex to identify list items (unordered *, -, + or ordered 1.)
+        # checking specifically for start of line or indentation
+        list_item_pattern = re.compile(r'^\s*([*+-]|\d+\.)\s+')
+        
+        for i, line in enumerate(lines):
+            # If current line is a list item
+            if list_item_pattern.match(line):
+                # Check previous line (if it exists)
+                if i > 0:
+                    prev_line = lines[i-1]
+                    # If previous line is not empty and NOT a list item itself
+                    # (and not a heading, though heading usually needs blank line too)
+                    if prev_line.strip() and not list_item_pattern.match(prev_line):
+                        # Insert a blank line
+                        new_lines.append("")
+            
+            new_lines.append(line)
+            
+        return "\n".join(new_lines)
+
     def generate_content(self, prompt, model='gemini-3-pro-preview', config=None):
         """
         Generic method to generate content with retry logic.
@@ -110,7 +145,7 @@ class GeminiClient:
             """
             
         prompts = {
-            "know": f"""
+            "know": textwrap.dedent(f"""
             {context_section}You are an expert logistics content writer (SEO specialist).
             Write a comprehensive educational article on the following keyword that deeply satisfies the reader's search intent.
             
@@ -158,9 +193,9 @@ class GeminiClient:
             ## Constraints
             - Do not introduce yourself.
             - **ABSOLUTELY NO HTML TAGS** (<br>, <p>, <div>, etc.).
-            """,
+            """),
             
-            "buy": f"""
+            "buy": textwrap.dedent(f"""
             You are a Logistics DX Consultant.
             Write a comparison/selection guide for solutions related to the keyword.
             
@@ -193,9 +228,9 @@ class GeminiClient:
             - **Examples**:
                 - Top 10 {keyword} Systems 2025: Pricing Compared
                 - Best {keyword}: A Buyer's Guide
-            """,
+            """),
             
-            "do": f"""
+            "do": textwrap.dedent(f"""
             You are a Logistics DX Evangelist.
             Write a practical "How-to" guide or case study article.
             
@@ -225,9 +260,9 @@ class GeminiClient:
             - **Examples**:
                  - Eliminate Picking Errors with {keyword}
                  - 3 Steps to Optimize Inventory using {keyword}
-            """,
+            """),
             
-            "news": f"""
+            "news": textwrap.dedent(f"""
             {context_section}You are a Logistics News Commentator.
             Write a news analysis article that explains the impact of this topic on the industry.
             
@@ -260,9 +295,9 @@ class GeminiClient:
             - **Examples**:
                 - {keyword}: Impact on Global Supply Chains
                 - Why {keyword} is Logistics' Next Big Thing
-            """,
+            """),
             
-            "global": f"""
+            "global": textwrap.dedent(f"""
             {context_section}You are a Global Logistics Trend Watcher.
             Write an article introducing a global trend/case study to a global audience (US/EU/Asia focus).
             
@@ -295,9 +330,9 @@ class GeminiClient:
             - **Examples**:
                 - {keyword} Transforming EU Supply Chains
                 - Future of {keyword}: Lessons from Amazon
-            """,
+            """),
 
-            "weekly_summary": f"""
+            "weekly_summary": textwrap.dedent(f"""
             {context_section}You are the Editor-in-Chief of LogiShift Global.
             Create a "Weekly Industry Summary" based on the provided articles. Provide deep insights, not just summaries.
             
@@ -335,7 +370,7 @@ class GeminiClient:
             - **Language**: STRICTLY English. NO Japanese characters allowed.
             - Format: Weekly LogiShift: [Date Range] | [Abstract Theme]
             - Example: Weekly LogiShift: Dec 13-20 | The Shift to Autonomous Supply Chains
-            """
+            """)
         }
         
         prompt = prompts.get(article_type, prompts["know"])
@@ -345,7 +380,7 @@ class GeminiClient:
         
         # Add common formatting instruction
         # Add common formatting instruction
-        prompt += """
+        prompt += textwrap.dedent("""
         
         ## Output Format
         Output MUST be in the following format:
@@ -360,9 +395,17 @@ class GeminiClient:
         - Subsection: ### (H3)
         - Detail: #### (H4)
         
-        **Markdown Rules:**
-        - **Lists:** MUST have a blank line before the list.
+        **Markdown Rules (CRITICAL FOR HTML CONVERSION):**
+        - **Lists:** YOU MUST put a blank line before any list (ordered or unordered).
+          - OK: 
+            Text.
+            
+            * Item 1
+          - NG:
+            Text.
+            * Item 1
         - **Nested Lists:** MUST use 4 spaces for indentation.
+        - **No Useless Indentation:** Do not indent normal paragraphs. This causes them to render as code blocks.
         
         **Heading Rules:**
         - DO NOT use generic headings like "Benefits" or "Key Points" repeatedly in H3/H4.
@@ -382,7 +425,7 @@ class GeminiClient:
         ### Key Features of WMS
         
         ...
-        """
+        """)
         
         try:
             response = self._retry_request(
@@ -390,7 +433,7 @@ class GeminiClient:
                 model='gemini-3-pro-preview',
                 contents=prompt
             )
-            return response.text
+            return self._sanitize_markdown(response.text)
         except Exception as e:
             print(f"Error generating content: {e}")
             return None
@@ -475,7 +518,7 @@ class GeminiClient:
         Returns:
             English image prompt optimized for Imagen 3.0
         """
-        prompt = f"""
+        prompt = textwrap.dedent(f"""
         You are an expert at creating image generation prompts for Imagen 3.0.
         
         Based on the following article information, create a detailed English image prompt that:
@@ -491,7 +534,7 @@ class GeminiClient:
         
         Generate a single, detailed English image prompt (max 100 words) that would create a compelling hero image for this article.
         Output ONLY the prompt text, no explanations.
-        """
+        """)
         
         try:
             response = self._retry_request(
@@ -509,7 +552,7 @@ class GeminiClient:
         """
         Classify the article content into categories and tags.
         """
-        prompt = f"""
+        prompt = textwrap.dedent(f"""
         You are an expert content classifier for a logistics media site.
         Analyze the following article content and classify it.
 
@@ -522,7 +565,7 @@ class GeminiClient:
             "industry_tags": ["list", "of", "relevant", "industries", "e.g.", "manufacturing", "retail", "ecommerce", "3pl-warehouse", "transportation"],
             "theme_tags": ["list", "of", "relevant", "themes", "e.g.", "labor-shortage", "automation", "cost-reduction", "quality-improvement", "safety", "environment"]
         }}
-        """
+        """)
         
         try:
             response = self._retry_request(
@@ -553,7 +596,7 @@ class GeminiClient:
             Generated markdown content
         """
         prompts = {
-            "privacy": """
+            "privacy": textwrap.dedent("""
             You are a legal content writer specializing in digital media.
             Create a Privacy Policy for "LogiShift Global" compliant with GDPR and international standards.
 
@@ -585,9 +628,9 @@ class GeminiClient:
             ## Notes
             - Clearly state user rights.
             - Provide contact email for privacy concerns.
-            """,
+            """),
 
-            "about": """
+            "about": textwrap.dedent("""
             You are a corporate communications expert.
             Create an "About Us" page for LogiShift Global.
 
@@ -622,9 +665,9 @@ class GeminiClient:
             - Use H2 (##) and H3 (###) for headings
             - Use a Markdown table for Operator Information
             - Tone: Professional, authoritative, yet innovative and accessible
-            """,
+            """),
 
-            "contact": """
+            "contact": textwrap.dedent("""
             You are a customer support specialist.
             Create a "Contact Us" page for LogiShift Global.
 
@@ -648,7 +691,7 @@ class GeminiClient:
             ## Notes
             - Clearly display info@logishift.net
             - Link to Privacy Policy for data handling
-            """
+            """)
         }
 
         prompt = prompts.get(page_type)
@@ -661,7 +704,7 @@ class GeminiClient:
         """
         Generate a structured JSON summary of the article for internal linking relevance.
         """
-        prompt = f"""
+        prompt = textwrap.dedent(f"""
         You are an expert content analyst. Analyze the following article and generate a structured summary in JSON format.
         This summary will be used by an AI system to identify relevant internal links.
         
@@ -674,7 +717,7 @@ class GeminiClient:
             "key_topics": ["list", "of", "specific", "sub-topics", "covered"],
             "entities": ["list", "of", "companies", "products", "or", "tools", "mentioned"]
         }}
-        """
+        """)
         
         try:
             response = self._retry_request(
@@ -699,7 +742,7 @@ class GeminiClient:
         # Truncate content for efficiency
         truncated_content = content[:3000]
         
-        prompt = f"""
+        prompt = textwrap.dedent(f"""
         You are an expert social media manager for a logistics media site "LogiShift Global".
         Create an engaging X (Twitter) post content based on the following article.
         
@@ -730,7 +773,7 @@ class GeminiClient:
             "summary": "Don't get left behind. Discover 3 key strategies to modernize your warehouse operations today. #SupplyChain #Logistics",
             "hashtags": ["#LogiShift", "#SupplyChain", "#WMS"]
         }}
-        """
+        """)
         
         try:
             response = self._retry_request(
@@ -763,7 +806,7 @@ class GeminiClient:
         # Prepare the list of existing titles for the prompt
         existing_list_str = "\n".join([f"- {title}" for title in existing_titles])
 
-        prompt = f"""
+        prompt = textwrap.dedent(f"""
         You are a duplicate detection system for a logistics news site.
         Your task is to determine if a NEW article covers the *same specific news event or core topic* as any of the EXISTING articles.
         
@@ -779,7 +822,7 @@ class GeminiClient:
         - Return "FALSE" if it is a new topic, a different angle, or a different company/product.
         - Be strict. If it's the same press release covered by a different site, it IS a duplicate.
         - Output ONLY "TRUE" or "FALSE".
-        """
+        """)
         
         try:
             # Use self.generate_content to leverage built-in retry and auth fallback logic
