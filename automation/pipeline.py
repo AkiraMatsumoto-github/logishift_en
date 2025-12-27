@@ -16,8 +16,6 @@ import sys
 import subprocess
 from datetime import datetime
 
-
-
 def run_command(command):
     """Run a shell command and return output."""
     print(f"Running: {command}")
@@ -49,10 +47,12 @@ def main():
     # Import modules directly
     sys.path.append(os.path.dirname(base_dir))
     from automation.collector import fetch_rss, DEFAULT_SOURCES
-    from automation.scorer import score_article
+    from automation.scorer import score_articles_batch
     from automation.url_reader import extract_content
     from automation.summarizer import summarize_article
     from automation.classifier import ArticleClassifier
+    from automation.gemini_client import GeminiClient
+    from automation.wp_client import WordPressClient
     
     collected_articles = []
     if args.hours:
@@ -60,11 +60,6 @@ def main():
     else:
         print(f"Collecting articles from last {args.days} days...")
     for name, url in DEFAULT_SOURCES.items():
-        # Note: fetch_rss in collector.py currently has hardcoded 2 days logic inside?
-        # Let's check.
-        # It has `if (now - published_parsed).days <= 2:`
-        # We should probably update collector.py to accept days param in fetch_rss.
-        # For now, let's assume 2 days is fine or just filter later.
         fetched = fetch_rss(url, name, days=args.days, hours=args.hours)
         collected_articles.extend(fetched)
         
@@ -79,10 +74,34 @@ def main():
         print(f"Limiting scoring to first {args.score_limit} articles.")
         articles_to_score = collected_articles[:args.score_limit]
     
-    for i, article in enumerate(articles_to_score):
-        print(f"[{i+1}/{len(articles_to_score)}] Scoring: {article['title'][:30]}...")
-        scored = score_article(article)
-        scored_articles.append(scored)
+    # Initialize GeminiClient once
+    try:
+        gemini_client = GeminiClient()
+        print("GeminiClient initialized.")
+    except Exception as e:
+        print(f"Error initializing Gemini: {e}")
+        gemini_client = None
+
+    if gemini_client and articles_to_score:
+        batch_size = 10
+        print(f"Scoring {len(articles_to_score)} articles in batches of {batch_size}...")
+        
+        for i in range(0, len(articles_to_score), batch_size):
+            batch = articles_to_score[i:i + batch_size]
+            print(f"[{i+1}-{min(i+batch_size, len(articles_to_score))}/{len(articles_to_score)}] Processing batch...")
+            
+            try:
+                batch_results = score_articles_batch(gemini_client, batch, start_id=i)
+                scored_articles.extend(batch_results)
+                 # Simple progress indication
+                for res in batch_results:
+                     print(f"  - Scored: {res.get('title', 'Unknown')[:40]}... -> {res.get('score', 0)} pts")
+            except Exception as e:
+                print(f"Error processing batch {i}: {e}")
+    elif not gemini_client:
+        print("Skipping scoring due to Client initialization failure.")
+    else:
+        print("No articles to score.")
             
     # Filter
     high_score_articles = [a for a in scored_articles if a["score"] >= args.threshold]
@@ -94,16 +113,10 @@ def main():
     print("\n=== Step 3: Generation ===")
     count = 0
     
-    # Schedule logic removed - defaulting to immediate publish
-    
     # Initialize Classifier
     classifier = ArticleClassifier()
     
-    # Initialize Clients for Deduplication
-    from automation.gemini_client import GeminiClient
-    from automation.wp_client import WordPressClient
-    
-    gemini_client = GeminiClient()
+    # Initialize WP Client
     wp_client = WordPressClient()
     
     # Fetch recent posts for deduplication context
@@ -160,7 +173,10 @@ def main():
                     check_against_titles = existing_titles + generated_titles_this_run
                     
                     print(f"Checking for duplicates against {len(check_against_titles)} existing items...")
-                    is_duplicate = gemini_client.check_duplication(article['title'], candidate_summary, check_against_titles)
+                    if gemini_client:
+                        is_duplicate = gemini_client.check_duplication(article['title'], candidate_summary, check_against_titles)
+                    else:
+                        is_duplicate = False # fallback
                     
                     if is_duplicate:
                         print(f"⚠️ SKIPPING DUPLICATE: {article['title']}")
@@ -183,22 +199,11 @@ def main():
                 print("Falling back to keyword-based generation")
         else:
             print("\n--- Keyword-based generation (traditional) ---")
-            # Know/Buy/Do articles: No context (maintain current behavior)
-            
-            # --- Simple Deduplication for non-news (optional, but good practice) ---
-            # Just check title against existing
-            # For now, let's skip expensive LLM check for 'know/buy/do' unless requested,
-            # as these are usually unique by keyword selection.
-            # But if we were strict:
-            # is_dup = gemini_client.check_duplication(article['title'], article['summary'], existing_titles + generated_titles_this_run)
             pass
         
         if args.dry_run:
             cmd.append("--dry-run")
         
-        # print(f"Scheduled for: {schedule_datetime}")
-
-            
         subprocess.run(cmd)
         count += 1
         print("-" * 40)
