@@ -2,9 +2,8 @@ name: Article Generation Pipeline
 
 on:
   schedule:
-    # 3時間ごとに実行 (0:00, 3:00, 6:00, 9:00 UTC)
-    # 日本時間では 9:00, 12:00, 15:00, 18:00
-    - cron: '0 */3 * * *'
+    # 6時間ごとに実行 (0:00, 6:00, 12:00, 18:00 UTC)
+    - cron: '0 */6 * * *'
   workflow_dispatch: # 手動実行も可能
 
 jobs:
@@ -41,7 +40,7 @@ jobs:
           GOOGLE_CLOUD_LOCATION: "global"
         run: |
           cd automation
-          python pipeline.py --hours 3 --threshold 70 --limit 1
+          python pipeline.py --hours 6 --threshold 70 --limit 2
       
       - name: Upload artifacts on failure
         if: failure()
