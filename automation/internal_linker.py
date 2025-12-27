@@ -11,28 +11,50 @@ class InternalLinkSuggester:
         self.wp = wp_client
         self.gemini = gemini_client
 
-    def fetch_candidates(self, limit: int = 100) -> List[Dict]:
+    def fetch_candidates(self) -> List[Dict]:
         """
         Fetch existing posts from WordPress to serve as link candidates.
+        Prioritizes:
+        1. Popular Posts (Top 20 by PV in last 7 days)
+        2. Recent Posts (100)
         """
-        print(f"Fetching last {limit} posts for internal linking candidates...")
-        posts = self.wp.get_posts(limit=limit, status="publish")
-        
-        if not posts:
-            print("No existing posts found.")
-            return []
+        print("Fetching internal linking candidates...")
 
-        candidates = []
-        for post in posts:
-            # Try to get structured summary from meta
-            # Note: The WP client's get_posts might return 'meta' if the API supports it in list view, 
-            # or we might rely on the fact that we put it there.
-            # If not available, fall back to excerpt.
+        # 1. Fetch Popular Posts
+        print("Fetching popular posts (Top 20, 7 days)...")
+        popular_posts = self.wp.get_popular_posts(days=7, limit=20)
+        if not popular_posts:
+            popular_posts = []
+        print(f"Fetched {len(popular_posts)} popular posts.")
+
+        # 2. Fetch Recent Posts
+        print("Fetching recent posts (Limit 100)...")
+        recent_posts = self.wp.get_posts(limit=100, status="publish")
+        if not recent_posts:
+            recent_posts = []
+        print(f"Fetched {len(recent_posts)} recent posts.")
+
+        # 3. Merge and Deduplicate
+        all_posts = []
+        seen_ids = set()
+
+        # Helper to process and add post
+        def add_post(post):
+            pid = post['id']
+            if pid in seen_ids:
+                return
+            
+            seen_ids.add(pid)
             
             ai_summary_json = None
             if 'meta' in post and 'ai_structured_summary' in post['meta']:
                  try:
-                     ai_summary_json = json.loads(post['meta']['ai_structured_summary'])
+                     # Check if it's already a dict or needs parsing
+                     meta_val = post['meta']['ai_structured_summary']
+                     if isinstance(meta_val, str):
+                        ai_summary_json = json.loads(meta_val)
+                     elif isinstance(meta_val, dict):
+                        ai_summary_json = meta_val
                  except:
                      pass
             
@@ -40,18 +62,33 @@ class InternalLinkSuggester:
             if ai_summary_json:
                 summary_text = f"Title: {post['title']['rendered']}\nSummary: {ai_summary_json.get('summary', '')}\nTopics: {', '.join(ai_summary_json.get('key_topics', []))}\nEntities: {', '.join(ai_summary_json.get('entities', []))}"
             else:
-                summary_text = f"Title: {post['title']['rendered']}\nExcerpt: {self._clean_excerpt(post['excerpt']['rendered'])}"
+                excerpt_raw = post['excerpt']['rendered'] if 'excerpt' in post else ""
+                summary_text = f"Title: {post['title']['rendered']}\nExcerpt: {self._clean_excerpt(excerpt_raw)}"
 
-            candidates.append({
-                "id": post['id'],
+            # Add marker for popular posts
+            is_popular = hasattr(post, 'views') or 'views' in post
+            if is_popular:
+                summary_text = "[POPULAR] " + summary_text
+
+            all_posts.append({
+                "id": pid,
                 "title": post['title']['rendered'],
                 "url": post['link'],
                 "summary_context": summary_text, # Store combined context for prompting
-                "excerpt": self._clean_excerpt(post['excerpt']['rendered']) # Keep original for fallback
+                "excerpt": self._clean_excerpt(post['excerpt']['rendered'] if 'excerpt' in post else ""),
+                "is_popular": is_popular
             })
+
+        # Process Popular first (Higher Priority)
+        for p in popular_posts:
+            add_post(p)
+            
+        # Process Recent second
+        for p in recent_posts:
+            add_post(p)
         
-        print(f"Loaded {len(candidates)} candidates.")
-        return candidates
+        print(f"Total unique candidates loaded: {len(all_posts)}")
+        return all_posts
 
     def score_relevance(self, new_article_keyword: str, new_article_context: str, candidates: List[Dict]) -> List[Dict]:
         """
@@ -61,7 +98,7 @@ class InternalLinkSuggester:
         if not candidates:
             return []
 
-        print("Scoring candidate relevance with Gemini (Enhanced Context)...")
+        print(f"Scoring candidate relevance with Gemini (Candidates: {len(candidates)})...")
         
         # Prepare candidates for the prompt
         candidates_text = ""
@@ -76,6 +113,8 @@ class InternalLinkSuggester:
         Evaluate the following existing articles and determine which ones are HIGHLY RELEVANT to the new article.
         Relevance means the existing article provides valuable supplementary information, detailed explanation of a sub-topic, or a related case study.
         
+        Note: Articles marked [POPULAR] have high traffic. If they are relevant, prioritize checks for them as they are good for SEO.
+
         Existing Articles:
         {candidates_text}
 
