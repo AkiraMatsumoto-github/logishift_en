@@ -346,3 +346,50 @@ function logishift_initialize_popular_articles() {
     }
 }
 add_action( 'init', 'logishift_initialize_popular_articles' );
+
+/**
+ * Register REST API endpoint for Popular Posts
+ */
+add_action( 'rest_api_init', function () {
+    register_rest_route( 'logishift/v1', '/popular-posts', array(
+        'methods' => 'GET',
+        'callback' => 'logishift_api_get_popular_posts',
+        'permission_callback' => '__return_true', // Public access allowed
+    ) );
+} );
+
+/**
+ * REST API Callback for Popular Posts
+ */
+function logishift_api_get_popular_posts( $request ) {
+    $days = $request->get_param( 'days' );
+    $limit = $request->get_param( 'limit' );
+    
+    if ( ! $days ) $days = 7;
+    if ( ! $limit ) $limit = 20;
+
+    // Use view controller function (make sure it's loaded)
+    if ( ! function_exists( 'logishift_get_popular_posts' ) ) {
+        return new WP_Error( 'internal_server_error', 'View controller not loaded', array( 'status' => 500 ) );
+    }
+
+    $popular_posts = logishift_get_popular_posts( $days, $limit );
+    
+    $data = array();
+    foreach ( $popular_posts as $post ) {
+        // Format similar to standard WP REST API for compatibility
+        $meta = get_post_meta($post->ID, 'ai_structured_summary', true);
+        
+        $data[] = array(
+            'id' => $post->ID,
+            'date' => $post->post_date,
+            'link' => get_permalink( $post->ID ),
+            'title' => array( 'rendered' => $post->post_title ),
+            'excerpt' => array( 'rendered' => $post->post_excerpt ), // Raw excerpt
+            'meta' => $meta ? array('ai_structured_summary' => $meta) : array(),
+            'views' => $post->views // Extra field
+        );
+    }
+
+    return $data;
+}

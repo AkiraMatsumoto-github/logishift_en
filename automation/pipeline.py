@@ -111,6 +111,12 @@ def main():
     
     # 3. Generation
     print("\n=== Step 3: Generation ===")
+    
+    if not high_score_articles:
+        print("No articles to generate (Score below threshold). Skipping generation step.")
+        # Exit normally
+        return
+
     count = 0
     
     # Initialize Classifier
@@ -165,10 +171,10 @@ def main():
                 
                 if article_content['content'] and "Error" not in article_content['title']:
                     summary_data = summarize_article(article_content['content'], article['title'])
-
+                    
                     # --- Deduplication Check ---
                     # Check against existing WP posts and currently generated articles
-                    candidate_summary = summary_data.get('summary', '')[:500] # Use the generated summary for better context
+                    candidate_summary = summary_data.get('summary', '')[:500]
                     
                     check_against_titles = existing_titles + generated_titles_this_run
                     
@@ -187,7 +193,7 @@ def main():
                         # Add to list for subsequent checks in this run
                         generated_titles_this_run.append(article['title'])
                     # ---------------------------
-                    
+
                     # Pass context as JSON string
                     context_json = json.dumps(summary_data, ensure_ascii=False)
                     cmd.extend(["--context", context_json])

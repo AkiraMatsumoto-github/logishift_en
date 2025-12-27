@@ -241,6 +241,27 @@ class WordPressClient:
                 print(f"Response content: {e.response.text}")
             return None
 
+    def get_popular_posts(self, days=7, limit=20):
+        """
+        Retrieve popular posts via custom REST API endpoint.
+        """
+        try:
+            url = f"{self.wp_url}/?rest_route=/logishift/v1/popular-posts"
+            params = {
+                "days": days,
+                "limit": limit
+            }
+            
+            # Simple GET request (public endpoint)
+            response = requests.get(url, params=params, auth=self.auth)
+            response.raise_for_status()
+            
+            return response.json()
+            
+        except Exception as e:
+            print(f"Error fetching popular posts: {e}")
+            return []
+
 if __name__ == "__main__":
     # Test connection
     try:
