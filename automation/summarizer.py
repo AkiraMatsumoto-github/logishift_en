@@ -57,10 +57,7 @@ def summarize_article(content: str, title: str, model_name: str = "gemini-3-pro-
     """
     print(f"Summarizing article: {title[:50]}...")
     
-    # Truncate content if too long (max 10000 chars)
-    if len(content) > 10000:
-        print(f"Content too long ({len(content)} chars), truncating to 10000 chars")
-        content = content[:10000] + "..."
+    # Removed content truncation to support long articles with Gemini 1.5+
     
     try:
         client = GeminiClient()
