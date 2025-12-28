@@ -29,7 +29,7 @@ def run_command(command):
 def main():
     parser = argparse.ArgumentParser(description="LogiShift Automation Pipeline")
     parser.add_argument("--days", type=int, help="Days to look back for collection")
-    parser.add_argument("--hours", type=int, default=3, help="Hours to look back for collection (overrides --days)")
+    parser.add_argument("--hours", type=int, default=None, help="Hours to look back for collection (overrides --days)")
     parser.add_argument("--threshold", type=int, default=70, help="Score threshold for generation")
     parser.add_argument("--limit", type=int, default=2, help="Max articles to generate per run")
     parser.add_argument("--score-limit", type=int, default=0, help="Max articles to score (0 for all)")
@@ -58,7 +58,13 @@ def main():
     if args.hours:
         print(f"Collecting articles from last {args.hours} hours...")
     else:
-        print(f"Collecting articles from last {args.days} days...")
+        # Default to 6 hours if neither is specified
+        if args.days is None:
+            args.hours = 6
+            print(f"Collecting articles from last {args.hours} hours (Default)...")
+        else:
+            print(f"Collecting articles from last {args.days} days...")
+            
     for name, url in DEFAULT_SOURCES.items():
         fetched = fetch_rss(url, name, days=args.days, hours=args.hours)
         collected_articles.extend(fetched)
@@ -86,6 +92,15 @@ def main():
         batch_size = 10
         print(f"Scoring {len(articles_to_score)} articles in batches of {batch_size}...")
         
+        # Early Exit Logic
+        high_score_count = 0
+        early_exit_threshold = int(args.limit * 2) # Updated to 2x buffer
+        # Ensure at least 1
+        if early_exit_threshold < 1:
+            early_exit_threshold = 1
+        
+        print(f"Early Exit Threshold configured: Stop if {early_exit_threshold} high-score articles found.")
+
         for i in range(0, len(articles_to_score), batch_size):
             batch = articles_to_score[i:i + batch_size]
             print(f"[{i+1}-{min(i+batch_size, len(articles_to_score))}/{len(articles_to_score)}] Processing batch...")
@@ -93,9 +108,18 @@ def main():
             try:
                 batch_results = score_articles_batch(gemini_client, batch, start_id=i)
                 scored_articles.extend(batch_results)
-                 # Simple progress indication
+                 # Simple progress indication & Count High Scores
                 for res in batch_results:
-                     print(f"  - Scored: {res.get('title', 'Unknown')[:40]}... -> {res.get('score', 0)} pts")
+                     score = res.get('score', 0)
+                     print(f"  - Scored: {res.get('title', 'Unknown')[:40]}... -> {score} pts")
+                     if score >= args.threshold:
+                         high_score_count += 1
+                
+                # Check for Early Exit
+                if high_score_count >= early_exit_threshold:
+                    print(f"\n🚀 Early Exit: Found {high_score_count} candidate articles (Target >= {early_exit_threshold}). Stopping scoring.")
+                    break
+
             except Exception as e:
                 print(f"Error processing batch {i}: {e}")
     elif not gemini_client:
