@@ -87,7 +87,7 @@ Output ONLY the following JSON format:
 }}
 """
 
-def score_articles_batch(client, articles, start_id, model_name="gemini-3-pro-preview"):
+def score_articles_batch(client, articles, start_id, model_name="gemini-3-flash-preview"):
     """
     Score a batch of articles using a single Gemini API call.
     """
@@ -166,7 +166,7 @@ def score_articles_batch(client, articles, start_id, model_name="gemini-3-pro-pr
             fallback_results.append(score_single_article(client, article, model_name))
         return fallback_results
 
-def score_single_article(client, article, model_name="gemini-3-pro-preview"):
+def score_single_article(client, article, model_name="gemini-3-flash-preview"):
     """Score a single article (fallback or legacy usage)."""
     prompt = SINGLE_SCORING_PROMPT.format(
         title=article.get("title", ""),
@@ -212,7 +212,7 @@ def main():
     parser.add_argument("--input", type=str, help="Path to JSON file with articles (from collector.py)", required=True)
     parser.add_argument("--threshold", type=int, default=80, help="Minimum score to pass (default: 80)")
     parser.add_argument("--output", type=str, help="Output file for scored articles (optional)")
-    parser.add_argument("--model", type=str, default="gemini-3-pro-preview", help="Gemini model to use")
+    parser.add_argument("--model", type=str, default="gemini-3-flash-preview", help="Gemini model to use")
     
     args = parser.parse_args()
     

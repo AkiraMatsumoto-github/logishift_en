@@ -43,7 +43,7 @@ Output ONLY the following JSON format:
 """
 
 
-def summarize_article(content: str, title: str, model_name: str = "gemini-3-pro-preview") -> dict:
+def summarize_article(content: str, title: str, model_name: str = "gemini-3-flash-preview") -> dict:
     """
     Summarize article content and extract key facts.
     

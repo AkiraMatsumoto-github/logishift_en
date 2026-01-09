@@ -167,19 +167,33 @@ class SEOOptimizer:
         Returns:
             str: Optimized title
         """
-        if len(title) <= 60:
+        # Check for Japanese characters (Hiragana, Katakana, Kanji, Zenkaku)
+        japanese_pattern = re.compile(r'[\u3000-\u303f\u3040-\u309f\u30a0-\u30ff\uff00-\uff9f\u4e00-\u9faf\u3400-\u4dbf]')
+        has_japanese = bool(japanese_pattern.search(title))
+
+        if len(title) <= 60 and not has_japanese:
             return title
         
-
-        # If too long, use Gemini to rewriting it intelligently while keeping the keyword
+        # If too long or contains Japanese, use Gemini to rewrite it
         try:
+            instruction = ""
+            if has_japanese:
+                instruction = "The title contains Japanese characters. TRANSLATE it to English and optimize it."
+            else:
+                instruction = "The title is too long. Rewrite it to be under 60 characters."
+
             prompt = f"""
-            Rewrite the following article title to be under 60 characters for SEO.
-            Must keep the core meaning and keywords.
+            Rewrite the following article title to be SEO-optimized English.
+            {instruction}
+            
+            Rules:
+            1. STRICTLY English only. No Japanese allowed.
+            2. Under 60 characters.
+            3. Maintain the core meaning and keywords.
             
             Original Title: {title}
             
-            Output ONLY the simplified title.
+            Output ONLY the simplified English title.
             """
             response = self.gemini.generate_content(prompt)
             optimized_title = response.text.strip()
@@ -189,20 +203,23 @@ class SEOOptimizer:
                 return optimized_title.strip('"') # Remove quotes if any
             else:
                 # Fallback to smart truncation if AI fails to shorten enough
-                # Try splitting by colon/dash but prioritize the part with more semantic weight?
-                # Actually, if AI failed, just truncate safely.
-                return title[:57] + "..."
+                return title[:57] + "..." if not has_japanese else optimized_title[:60]
                 
         except Exception as e:
             print(f"Warning: Title optimization failed: {e}")
-            # Fallback to naive truncation
-            separators = [":", " - ", "|"]
-            for sep in separators:
-                if sep in title:
-                    parts = title.split(sep)
-                    if len(parts[0]) >= 20 and len(parts[0]) <= 60:
-                        return parts[0].strip()
-            return title[:57] + "..."
+            # Fallback to naive truncation only if no Japanese (otherwise we might return broken Japanese)
+            if not has_japanese:
+                separators = [":", " - ", "|"]
+                for sep in separators:
+                    if sep in title:
+                        parts = title.split(sep)
+                        if len(parts[0]) >= 20 and len(parts[0]) <= 60:
+                            return parts[0].strip()
+                return title[:57] + "..."
+            
+            # If Japanese and API failed, we can't do much but return it or a generic error.
+            # Returning original is safer than breaking it, but user asked for English.
+            return title # Best effort failure mode
 
 
 if __name__ == "__main__":
