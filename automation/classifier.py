@@ -75,7 +75,7 @@ class ArticleClassifier:
         
         try:
             response = self.gemini.client.models.generate_content(
-                model='gemini-3-pro-preview',
+                model='gemini-3-flash-preview',
                 contents=prompt,
                 config={
                     'response_mime_type': 'application/json'
@@ -144,7 +144,7 @@ class ArticleClassifier:
 
         try:
             response = self.gemini.client.models.generate_content(
-                model='gemini-3-pro-preview',
+                model='gemini-3-flash-preview',
                 contents=prompt,
                 config={
                     'response_mime_type': 'text/plain'
