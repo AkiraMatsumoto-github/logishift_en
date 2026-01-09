@@ -178,16 +178,17 @@ class GeminiClient:
             
             ## Title Generation Rules
             - **Goal**: Maximize CTR.
-            - **Language**: STRICTLY English. NO Japanese characters allowed.
+            - **Language**: STRICTLY English. NO Japanese characters allowed. Even if the keyword is in Japanese, YOU MUST translate it to English for the title.
             - **Length**: STRICTLY under 60 characters.
             - **Structure**:
-                1. Keyword at the start.
-                2. Benefit/Promise (e.g., "Guide", "Cost Reduction").
+                1. **Keyword First**: Place the target keyword as close to the beginning (left) as possible for SEO.
+                2. **Benefit/Promise**: Add a strong benefit (e.g., "Guide", "Cost Reduction", "Strategies").
+                3. **Power Words**: Use engagement-boosting words like "Essential", "Proven", "Ultimate".
             
             ## Title Examples
-            - {keyword} Guide: Essential Logistics Strategies
-            - 5 Benefits of {keyword} for Warehousing
-            - Implementing {keyword}: Reduce Costs by 20%
+            - {keyword}: The Ultimate Guide for 2025
+            - 5 Essential Strategies for {keyword} Optimization
+            - {keyword} Explained: Reduce Costs by 20%
             
             Produce a title based on these principles.
             ## Constraints
@@ -222,12 +223,16 @@ class GeminiClient:
             
             ## Title Rules
             - **Goal**: Capture "Buy" intent.
-            - **Language**: STRICTLY English. NO Japanese characters allowed.
+            - **Language**: STRICTLY English. NO Japanese characters allowed. Even if the keyword is in Japanese, YOU MUST translate it to English for the title.
             - **Length**: STRICTLY under 60 characters.
             - **Elements**: Keyword, Numbers ("Top 10"), Year ("2025").
+            - **SEO Optimize**:
+                1. Keep the keyword near the front.
+                2. Use "Best", "Top", "Review", "Comparison".
+                3. Include the current year (e.g., "2025") to show freshness.
             - **Examples**:
-                - Top 10 {keyword} Systems 2025: Pricing Compared
-                - Best {keyword}: A Buyer's Guide
+                - Top 10 {keyword} Solutions for 2025 (Review)
+                - Best {keyword} Systems: A Buyer's Guide
             """),
             
             "do": textwrap.dedent(f"""
@@ -254,19 +259,23 @@ class GeminiClient:
             
             ## Title Rules
             - **Goal**: Solves "Do" intent (Actionable).
-            - **Language**: STRICTLY English. NO Japanese characters allowed.
+            - **Language**: STRICTLY English. NO Japanese characters allowed. Even if the keyword is in Japanese, YOU MUST translate it to English for the title.
             - **Length**: STRICTLY under 60 characters.
             - **Elements**: Keyword, Benefit ("Zero Errors"), Action ("How to").
+            - **SEO Optimize**:
+                1. Start with "How to" or the Keyword.
+                2. Use numbers for steps (e.g., "3 Steps", "5 Ways").
+                3. Focus on the result/benefit.
             - **Examples**:
-                 - Eliminate Picking Errors with {keyword}
-                 - 3 Steps to Optimize Inventory using {keyword}
+                 - How to Implement {keyword} in 3 Simple Steps
+                 - Eliminate Picking Errors with {keyword}: A Practical Guide
             """),
             
             "news": textwrap.dedent(f"""
             {context_section}You are a Logistics News Commentator.
             Write a news analysis article that explains the impact of this topic on the industry.
             
-            Keyword: {keyword}
+            Source Information / Topic: {keyword} (This is the title/topic of the source news)
             
             ## Target
             - Executives and managers wanting to stay ahead of trends.
@@ -289,12 +298,17 @@ class GeminiClient:
             
             ## Title Rules
             - **Goal**: High Impact & CTR.
-            - **Language**: STRICTLY English. NO Japanese characters allowed.
+            - **Language**: STRICTLY English. NO Japanese characters allowed. Even if the keyword is in Japanese, YOU MUST translate it to English for the title.
             - **Length**: STRICTLY under 60 characters.
             - **Elements**: Keyword, Insight/Impact.
+            - **SEO Optimize**:
+                1. **Keyword Extraction**: Extract the main entity or topic from the Source Information above and use it as the SEO keyword.
+                2. Ensure the keyword is in the first half of the title.
+                3. Use words like "Impact", "Future", "Alert", "Trend".
+                4. Make it sound urgent or critical.
             - **Examples**:
-                - {keyword}: Impact on Global Supply Chains
-                - Why {keyword} is Logistics' Next Big Thing
+                - {keyword}: Major Impact on Global Supply Chains
+                - Why {keyword} is the Future of logistics (2025 Analysis)
             """),
             
             "global": textwrap.dedent(f"""
@@ -324,12 +338,15 @@ class GeminiClient:
             
             ## Title Rules
             - **Goal**: Intrigue and Relevance.
-            - **Language**: STRICTLY English. NO Japanese characters allowed.
+            - **Language**: STRICTLY English. NO Japanese characters allowed. Even if the keyword is in Japanese, YOU MUST translate it to English for the title.
             - **Length**: STRICTLY under 60 characters.
             - **Elements**: Keyword, Global Scale, Innovation.
+            - **SEO Optimize**:
+                1. Pair the keyword with global terms (US, EU, China, Global).
+                2. Use "Case Study", "Success Story", "Innovation".
             - **Examples**:
-                - {keyword} Transforming EU Supply Chains
-                - Future of {keyword}: Lessons from Amazon
+                - {keyword} in Europe: Lessons for Global Supply Chains
+                - The Future of {keyword}: Innovation Case Study from Amazon
             """),
 
             "weekly_summary": textwrap.dedent(f"""
