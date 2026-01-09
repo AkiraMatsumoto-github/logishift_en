@@ -45,7 +45,7 @@
 				?>
 				<?php
 				$logishift_description = get_bloginfo( 'description', 'display' );
-				if ( $logishift_description || is_customize_preview() ) :
+				if ( false ) : // $logishift_description || is_customize_preview()
 					?>
 					<p class="site-description"><?php echo $logishift_description; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
 				<?php endif; ?>
