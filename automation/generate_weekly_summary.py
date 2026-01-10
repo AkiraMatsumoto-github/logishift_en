@@ -189,7 +189,7 @@ keyword: {keyword}
     # Ideally find or create a category. For now let's leave uncategorized or use 'News' if available?
     # Let's search for a category "Weekly" or "News"
     cat_id = None
-    weekly_cat = wp.get_category_id("weekly-report")
+    weekly_cat = wp.get_category_id("weekly-summary")
     if weekly_cat:
         cat_id = [weekly_cat]
     else:

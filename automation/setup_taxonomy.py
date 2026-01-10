@@ -43,6 +43,11 @@ def create_categories(wp):
             "slug": "startups",
             "description": "Spotlight on emerging players and disruptive innovations in the logistics sector. Coverage of funding news, new tech solutions, and future unicorns."
         },
+        {
+            "name": "Weekly Summary",
+            "slug": "weekly-summary",
+            "description": "Curated weekly highlights of the most impactful logistics news and analysis. Your essential weekend read for industry trends."
+        },
     ]
     
     print("Creating/Updating categories...")

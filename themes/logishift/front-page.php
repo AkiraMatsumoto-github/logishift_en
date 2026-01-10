@@ -124,6 +124,70 @@ get_header();
 		</div>
 	</section>
 
+	<!-- Weekly Summary Section -->
+	<section id="weekly-summary" class="weekly-summary-section">
+		<div class="container">
+			<div class="section-header">
+				<h2 class="section-title"><?php esc_html_e( 'Weekly Summary', 'logishift' ); ?></h2>
+			</div>
+
+			<div class="weekly-summary-container">
+				<?php
+				$weekly_args = array(
+					'category_name'  => 'weekly-summary',
+					'posts_per_page' => 1, // Focus on the latest one
+					'orderby'        => 'date',
+					'order'          => 'DESC',
+				);
+				$weekly_query = new WP_Query( $weekly_args );
+
+				if ( $weekly_query->have_posts() ) :
+					while ( $weekly_query->have_posts() ) :
+						$weekly_query->the_post();
+						?>
+						<article id="post-<?php the_ID(); ?>" <?php post_class( 'weekly-hero-card' ); ?>>
+							<div class="weekly-thumbnail">
+								<?php if ( has_post_thumbnail() ) : ?>
+									<a href="<?php the_permalink(); ?>">
+										<?php the_post_thumbnail( 'large' ); ?>
+									</a>
+								<?php else : ?>
+									<a href="<?php the_permalink(); ?>"><div class="no-image" style="background-color: #eee; height: 250px; border-radius: 8px;"></div></a>
+								<?php endif; ?>
+							</div>
+							<div class="weekly-content">
+								<div class="weekly-meta">
+									<span class="weekly-label">Weekly Summary</span>
+									<span class="posted-on"><?php echo get_the_date(); ?></span>
+								</div>
+								<h3 class="weekly-title">
+									<a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
+								</h3>
+								<div class="weekly-excerpt">
+									<?php the_excerpt(); ?>
+								</div>
+								<a href="<?php the_permalink(); ?>" class="weekly-button">
+									<?php esc_html_e( 'Read Summary', 'logishift' ); ?>
+								</a>
+							</div>
+						</article>
+						<?php
+					endwhile;
+					wp_reset_postdata();
+				else :
+					?>
+					<p style="text-align: center; color: #777;"><?php esc_html_e( 'No weekly summaries available yet.', 'logishift' ); ?></p>
+				<?php endif; ?>
+			</div>
+			
+			<div style="text-align: right; margin-top: 24px;">
+				<a href="<?php echo esc_url( get_category_link( get_category_by_slug( 'weekly-summary' ) ) ); ?>" class="text-link-arrow">
+					<?php esc_html_e( 'View Past Summaries', 'logishift' ); ?> →
+				</a>
+			</div>
+		</div>
+	</section>
+
 	<!-- Popular Articles Section -->
 	<section id="popular-articles" class="popular-articles-section" style="background-color: var(--color-light-gray);">
 		<div class="container">
