@@ -165,8 +165,8 @@ def main():
                 if relevant_links:
                     print(f"Found {len(relevant_links)} relevant articles for linking.")
                     
-                    # Sort by score descending and take top 5 for context inclusion
-                    top_relevant = sorted(relevant_links, key=lambda x: x.get('score', 0), reverse=True)[:5]
+                    # Results are already sorted and limited by score_relevance
+                    top_relevant = relevant_links
                     
                     # Build instructions
                     links_text = ""

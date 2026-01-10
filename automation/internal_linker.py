@@ -11,12 +11,12 @@ class InternalLinkSuggester:
         self.wp = wp_client
         self.gemini = gemini_client
 
-    def fetch_candidates(self) -> List[Dict]:
+    def fetch_candidates(self, limit: int = 100) -> List[Dict]:
         """
         Fetch existing posts from WordPress to serve as link candidates.
         Prioritizes:
         1. Popular Posts (Top 20 by PV in last 7 days)
-        2. Recent Posts (100)
+        2. Recent Posts (limit)
         """
         print("Fetching internal linking candidates...")
 
@@ -28,8 +28,8 @@ class InternalLinkSuggester:
         print(f"Fetched {len(popular_posts)} popular posts.")
 
         # 2. Fetch Recent Posts
-        print("Fetching recent posts (Limit 100)...")
-        recent_posts = self.wp.get_posts(limit=100, status="publish")
+        print(f"Fetching recent posts (Limit {limit})...")
+        recent_posts = self.wp.get_posts(limit=limit, status="publish")
         if not recent_posts:
             recent_posts = []
         print(f"Fetched {len(recent_posts)} recent posts.")
