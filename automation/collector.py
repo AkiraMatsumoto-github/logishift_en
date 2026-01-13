@@ -5,6 +5,7 @@ import os
 from datetime import datetime, timedelta
 from dateutil import parser as date_parser
 import time
+import random
 
 # Default RSS Sources
 DEFAULT_SOURCES = {
@@ -21,9 +22,6 @@ DEFAULT_SOURCES = {
     "lnews": "https://www.lnews.jp/feed/",
     "logistics_today": "https://www.logi-today.com/feed",
     "logi_biz": "https://online.logi-biz.com/feed/",
-    "the_loadstar": "https://theloadstar.com/feed/",
-    "logistics_manager_uk": "https://www.logisticsmanager.com/feed/",
-    "supply_chain_asia": "https://supplychainasia.org/feed/",
 }
 
 def fetch_rss(url, source_name, days=None, hours=None):
@@ -109,7 +107,12 @@ def main():
                 print(f"Warning: Source '{key}' not found in defaults.")
 
     all_articles = []
-    for name, url in target_sources.items():
+    
+    # Shuffle sources to avoid bias (e.g. always picking up the first source's duplicate news first)
+    source_items = list(target_sources.items())
+    random.shuffle(source_items)
+
+    for name, url in source_items:
         articles = fetch_rss(url, name, days=args.days, hours=args.hours)
         all_articles.extend(articles)
         time.sleep(1) # Be nice to servers
