@@ -1102,6 +1102,7 @@ section {
     display: flex;
     justify-content: center;
     gap: var(--spacing-sm);
+    flex-wrap: wrap;
 }
 
 .pagination .page-numbers {
@@ -1541,6 +1542,16 @@ section {
         gap: 8px;
         align-content: flex-start;
         margin-top: 0px;
+    }
+
+    /* Mobile Pagination */
+    .pagination {
+        margin-top: var(--spacing-lg);
+    }
+
+    .pagination .page-numbers {
+        padding: 6px 12px;
+        font-size: 0.8rem;
     }
 }
 
@@ -2012,6 +2023,7 @@ section {
     background-color: #f0f4f8;
     padding: 40px 0;
 }
+
 .weekly-hero-card {
     display: flex;
     gap: 30px;
@@ -2019,64 +2031,74 @@ section {
     background: #fff;
     padding: 30px;
     border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
+
 .weekly-thumbnail {
     flex: 1;
     max-width: 50%;
 }
+
 .weekly-thumbnail img {
     width: 100%;
     height: auto;
     border-radius: 8px;
     object-fit: cover;
 }
+
 .weekly-content {
     flex: 1;
     display: flex;
     flex-direction: column;
 }
+
 .weekly-meta {
-    margin-bottom: 15px; 
-    color: #666; 
+    margin-bottom: 15px;
+    color: #666;
     font-size: 0.9em;
 }
+
 .weekly-label {
-    background: #2c3e50; 
-    color: #fff; 
-    padding: 4px 10px; 
-    border-radius: 20px; 
-    font-size: 0.8em; 
+    background: #2c3e50;
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8em;
     margin-right: 10px;
     display: inline-block;
 }
+
 .weekly-title {
-    font-size: 1.8em; 
-    margin-bottom: 15px; 
+    font-size: 1.8em;
+    margin-bottom: 15px;
     line-height: 1.4;
 }
+
 .weekly-title a {
-    text-decoration: none; 
+    text-decoration: none;
     color: #333;
 }
+
 .weekly-excerpt {
-    font-size: 1em; 
-    color: #555; 
-    line-height: 1.6; 
+    font-size: 1em;
+    color: #555;
+    line-height: 1.6;
     margin-bottom: 20px;
 }
+
 .weekly-button {
-    background: #e67e22; 
-    color: #fff; 
+    background: #e67e22;
+    color: #fff;
     padding: 12px 0;
-    text-decoration: none; 
-    border-radius: 5px; 
+    text-decoration: none;
+    border-radius: 5px;
     font-weight: bold;
     display: inline-block;
     transition: background 0.3s;
     width: 100%;
     text-align: center;
 }
+
 .weekly-button:hover {
     background: #d35400;
 }
@@ -2087,12 +2109,15 @@ section {
         padding: 20px;
         gap: 10px;
     }
+
     .weekly-thumbnail {
         display: none;
     }
+
     .weekly-title {
         font-size: 1.2em;
     }
+
     .weekly-excerpt {
         font-size: 0.95em;
         display: -webkit-box;
@@ -2101,6 +2126,7 @@ section {
         overflow: hidden;
         margin-bottom: 25px;
     }
+
     .weekly-button {
         width: 100%;
         text-align: center;
