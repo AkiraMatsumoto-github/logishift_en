@@ -778,8 +778,11 @@ class GeminiClient:
         2. **Summary**: A compelling teaser. Do NOT just summarize. Explain "Why this matters" or "What they will lose by not reading".
            - Focus on benefits.
            - Max 200 chars.
-        3. **Hashtags**: 3-5 relevant English hashtags.
-           - Use specific tags like #SupplyChain, #Logistics, #WarehouseAutomation, #Amazon.
+        3. **Hashtags**: Select 5 strategic hashtags to maximize impressions and engagement.
+           - **Strategy**: Mix "Big Words" and "Middle Words".
+             - Include 2 **"Big Words"** (High volume, heavy traffic) e.g., #SupplyChain, #Logistics, #Tech.
+             - Include 3 **"Middle Words"** (Specific niche, high engagement target) e.g., #WarehouseAutomation, #LastMileDelivery, #ColdChain, #GenerativeAI.
+           - **Goal**: Balance broad reach with targeted relevance.
 
         4. Language: English. 
         5. **Tone**: Professional but urgent/exciting.
@@ -788,14 +791,14 @@ class GeminiClient:
         {{
             "hook": "😱 Is your WMS outdated?",
             "summary": "Don't get left behind. Discover 3 key strategies to modernize your warehouse operations today. #SupplyChain #Logistics",
-            "hashtags": ["#LogiShift", "#SupplyChain", "#WMS"]
+            "hashtags": ["#SupplyChain", "#Logistics", "#WMS", "#WarehouseAutomation", "#DigitalTransformation"]
         }}
         """)
         
         try:
             response = self._retry_request(
                 self.client.models.generate_content,
-                model='gemini-3-pro-preview',
+                model='gemini-3-flash-preview',
                 contents=prompt,
                 config=types.GenerateContentConfig(
                     response_mime_type="application/json"

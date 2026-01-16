@@ -444,14 +444,18 @@ Select the most relevant ones (if any) and include them in the article using sta
                         
                         if sns_content_data:
                             # Construct post text
-                            post_text = f"【新着記事】\n{sns_content_data.get('hook', optimized_title)}\n\n"
+                            post_text = f"{sns_content_data.get('hook', optimized_title)}\n\n"
                             post_text += f"{sns_content_data.get('summary', '')}\n\n"
                             
                             tags = sns_content_data.get('hashtags', [])
                             if tags:
                                 post_text += " ".join(tags) + "\n\n"
                                 
-                            post_text += result.get('link')
+                            article_link = result.get('link')
+                            if article_link:
+                                post_text += f"{article_link}"
+                            else:
+                                print("Warning: Article link not found in WordPress result.")
                             
                             print("--------------------------------------------------")
                             print(f"Posting to X:\n{post_text}")
