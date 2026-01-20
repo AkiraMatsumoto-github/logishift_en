@@ -545,3 +545,105 @@ function logishift_json_ld() {
 }
 add_action( 'wp_head', 'logishift_json_ld' );
 
+
+/**
+ * 5. Custom XML Sitemap
+ * Generates a lightweight XML sitemap at /sitemap.xml
+ */
+function logishift_sitemap_init() {
+    add_rewrite_rule( 'sitemap\.xml$', 'index.php?logishift_sitemap=1', 'top' );
+}
+add_action( 'init', 'logishift_sitemap_init' );
+
+function logishift_sitemap_query_vars( $vars ) {
+    $vars[] = 'logishift_sitemap';
+    return $vars;
+}
+add_filter( 'query_vars', 'logishift_sitemap_query_vars' );
+
+function logishift_sitemap_render() {
+    if ( get_query_var( 'logishift_sitemap' ) ) {
+        header( 'Content-Type: application/xml; charset=utf-8' );
+        echo '<?xml version="1.0" encoding="UTF-8"?>';
+        ?>
+        <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+            <!-- Home -->
+            <url>
+                <loc><?php echo esc_url( home_url( '/' ) ); ?></loc>
+                <lastmod><?php echo date( 'c' ); ?></lastmod>
+                <changefreq>daily</changefreq>
+                <priority>1.0</priority>
+            </url>
+
+            <!-- Pages -->
+            <?php
+            $pages = get_posts( array(
+                'numberposts' => 100,
+                'post_type'   => 'page',
+                'post_status' => 'publish',
+            ) );
+            foreach ( $pages as $p ) : ?>
+            <url>
+                <loc><?php echo esc_url( get_permalink( $p->ID ) ); ?></loc>
+                <lastmod><?php echo get_the_modified_date( 'c', $p->ID ); ?></lastmod>
+                <changefreq>daily</changefreq>
+                <priority>0.8</priority>
+            </url>
+            <?php endforeach; ?>
+
+            <!-- Categories -->
+            <?php
+            $categories = get_categories();
+            foreach ( $categories as $cat ) : ?>
+            <url>
+                <loc><?php echo esc_url( get_category_link( $cat->term_id ) ); ?></loc>
+                <changefreq>daily</changefreq>
+                <priority>0.6</priority>
+            </url>
+            <?php endforeach; ?>
+
+            <!-- Posts -->
+            <?php
+            $posts = get_posts( array(
+                'numberposts' => 1000,
+                'post_type'   => 'post',
+                'post_status' => 'publish',
+                'orderby'     => 'date',
+                'order'       => 'DESC',
+            ) );
+            foreach ( $posts as $p ) : ?>
+            <url>
+                <loc><?php echo esc_url( get_permalink( $p->ID ) ); ?></loc>
+                <lastmod><?php echo get_the_modified_date( 'c', $p->ID ); ?></lastmod>
+                <changefreq>monthly</changefreq>
+                <priority>0.5</priority>
+            </url>
+            <?php endforeach; ?>
+
+        </urlset>
+        <?php
+        exit;
+    }
+}
+add_action( 'template_redirect', 'logishift_sitemap_render' );
+
+/**
+ * Flush rewrite rules if sitemap rule is missing.
+ * Runs only once per admin pageload if needed.
+ */
+function logishift_check_sitemap_rules() {
+    $rules = get_option( 'rewrite_rules' );
+    if ( ! isset( $rules['sitemap\.xml$'] ) ) {
+        global $wp_rewrite;
+        $wp_rewrite->flush_rules();
+    }
+}
+add_action( 'admin_init', 'logishift_check_sitemap_rules' );
+
+/**
+ * 6. Disable Default WP Sitemap
+ * Prevent conflict with our custom sitemap.xml
+ */
+add_filter( 'wp_sitemaps_enabled', '__return_false' );
+
+
